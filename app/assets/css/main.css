@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+@import "primeicons/primeicons.css";
+
+* {
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.btn-back {
+    @apply inline-flex items-center gap-2 border border-gray-600 text-gray-400 py-1.5 ps-1 pe-3 mb-4 text-sm rounded-md hover:bg-gray-100 hover:text-gray-600;
+}
+
+.card-port {
+    @apply hover:translate-y-[-4px] transition-all duration-300;
+}
+
+.card-port .p-card-body {
+    gap: 0;
+    border-radius: 12px;
+}
+
+.card-port .p-card-body:hover {
+    box-shadow: 0 1px 2px 0 #FFF;
+    transition: all 0.3s ease-in-out;
+}

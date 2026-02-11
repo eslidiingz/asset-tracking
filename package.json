@@ -1,0 +1,47 @@
+{
+  "name": "my-investment-portfolio",
+  "author": {
+    "name": "eSliDiiNGz",
+    "email": "eslidiingz@gmail.com"
+  },
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@libsql/client": "0.17.0",
+    "@nuxt/fonts": "0.13.0",
+    "@nuxt/icon": "2.2.1",
+    "@pinia/nuxt": "0.11.3",
+    "@primeuix/themes": "^2.0.3",
+    "@tailwindcss/vite": "^4.1.18",
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
+    "nuxt": "^4.3.0",
+    "pinia": "^3.0.4",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.5.4",
+    "tailwindcss": "^4.1.18",
+    "tailwindcss-primeui": "^0.6.1",
+    "vue": "^3.5.27",
+    "vue-router": "^4.6.4",
+    "zod": "^4.3.6"
+  },
+  "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531",
+  "devDependencies": {
+    "@primevue/nuxt-module": "4.5.4",
+    "@types/better-sqlite3": "^7.6.13",
+    "drizzle-kit": "^0.31.8",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.2.4"
+  }
+}

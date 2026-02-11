@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1770178395328,
+      "tag": "0000_chief_mentor",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1770185294832,
+      "tag": "0001_little_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1770191291941,
+      "tag": "0002_cheerful_skrulls",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1770207898919,
+      "tag": "0003_overconfident_leader",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1770208777197,
+      "tag": "0004_confused_agent_brand",
+      "breakpoints": true
+    }
+  ]
+}
