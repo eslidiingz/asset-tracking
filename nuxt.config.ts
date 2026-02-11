@@ -33,9 +33,11 @@ export default defineNuxtConfig({
     plugins: [tailwindcss() as any],
   },
   typescript: {
-    typeCheck: false
+    typeCheck: false,
+    tsConfig: {
+      compilerOptions: {
+        types: ["@types/bun"]
+      }
+    }
   },
-  // pinia: {
-  //   storesDirs: ['stores']
-  // }
 });

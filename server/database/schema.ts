@@ -1,6 +1,13 @@
 import { relations } from "drizzle-orm";
 import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+export const usersTable = sqliteTable('users', {
+    id: int().primaryKey({ autoIncrement: true }),
+    username: text().notNull(),
+    password: text().notNull(),
+    is_active: int().default(1),
+})
+
 export const assetsTable = sqliteTable('assets', {
     id: int().primaryKey({ autoIncrement: true }),
     name: text().notNull(),

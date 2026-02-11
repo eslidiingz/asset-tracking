@@ -54,7 +54,7 @@ const addPortfolio = async () => {
     <div class="flex justify-between items-center mb-3">
         <h2 class="text-2xl font-bold">My Assets</h2>
         <div>Value: <span class="font-bold text-primary">{{ formatNumber(assetTotalValue) }}</span></div>
-        
+
         <Button @click="visible = true" v-if="remainingRatio > 0">
             <Icon name="lucide:plus" />
             <span>Add Asset</span>
@@ -80,8 +80,7 @@ const addPortfolio = async () => {
 
 
     <div class="card flex justify-center">
-        <Dialog v-model:visible="visible" modal header="Add Asset" class="w-full max-w-md mx-4"
-            @hide="onCloseModal">
+        <Dialog v-model:visible="visible" modal header="Add Asset" class="w-full max-w-md mx-4" @hide="onCloseModal">
             <Form @submit="addPortfolio">
                 <div class="mb-6">
                     <div class="flex flex-col mb-2">
@@ -92,8 +91,8 @@ const addPortfolio = async () => {
                             v-model="form.description" />
                     </div>
                     <div class="flex flex-col mb-2">
-                        <InputText name="ratio" type="number" placeholder="Ratio" v-model.number="form.ratio" :max="remainingRatio"
-                            min="0.1" step="0.1" />
+                        <InputText name="ratio" type="number" placeholder="Ratio" v-model.number="form.ratio"
+                            :max="remainingRatio" min="0.1" step="0.1" />
                         <small class="text-xs text-gray-600 my-1">Remaining ratio: {{ remainingRatio }}%</small>
                     </div>
                 </div>
