@@ -56,11 +56,12 @@ export const useStockStore = defineStore('stock', () => {
     }
 
     const fetchAssets = async () => {
+        const { $api } = useNuxtApp()
         await fetchPriceList()
 
         if (assets.value.length > 0) return
 
-        const result = await $fetch(`/api/assets`);
+        const result = await $api(`/api/assets`);
 
         const _assets = result?.data as Asset[]
 

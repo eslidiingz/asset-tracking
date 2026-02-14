@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { portsTable } from '~~/server/database/schema';
-import { useDrizzle } from '~~/server/utils/drizzle';
+import { assetsTable, portsTable } from '~~/server/database/schema';
+import { and, eq } from 'drizzle-orm';
 
 const schema = z.object({
     asset_id: z.number(),
@@ -10,6 +10,7 @@ const schema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
+    const userId = requireUserId(event);
     const validated = await readValidatedBody(event, body => schema.safeParse(body))
 
     if (!validated.success)
@@ -18,10 +19,25 @@ export default defineEventHandler(async (event) => {
             statusMessage: `Portfolio name is required`,
         })
 
-    const port: typeof portsTable.$inferInsert = validated.data
+    // ตรวจสอบว่า Asset ที่อ้างถึงเป็นของผู้ใช้นี้จริงหรือไม่
+    const asset = await useDrizzle().select()
+        .from(assetsTable)
+        .where(and(
+            eq(assetsTable.id, validated.data.asset_id),
+            eq(assetsTable.user_id, userId)
+        ))
+        .get();
 
-    const portCreated = useDrizzle().insert(portsTable).values(port).returning().get()
-    
+    if (!asset) {
+        throw createError({
+            status: 403,
+            statusMessage: 'Unauthorized: Direct access to this asset is not allowed'
+        })
+    }
+
+    const port: typeof portsTable.$inferInsert = validated.data
+    const portCreated = await useDrizzle().insert(portsTable).values(port).returning().get()
+
     return {
         success: true,
         message: 'Port created successfully',

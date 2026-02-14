@@ -10,6 +10,7 @@ export const usersTable = sqliteTable('users', {
 
 export const assetsTable = sqliteTable('assets', {
     id: int().primaryKey({ autoIncrement: true }),
+    user_id: int().notNull().references(() => usersTable.id),
     name: text().notNull(),
     description: text(),
     ratio: real(),
@@ -35,35 +36,30 @@ export const stocksTable = sqliteTable('stocks', {
     ratio: real(),
 })
 
-export const assetsRelations = relations(assetsTable, ({ many }) => ({
+// RELATIONS
+export const usersRelations = relations(usersTable, ({ many }) => ({
+    assets: many(assetsTable),
+}))
+
+export const assetsRelations = relations(assetsTable, ({ one, many }) => ({
+    user: one(usersTable, {
+        fields: [assetsTable.user_id],
+        references: [usersTable.id],
+    }),
     ports: many(portsTable),
 }))
 
-export const portsRelations = relations(portsTable, ({ many }) => ({
+export const portsRelations = relations(portsTable, ({ one, many }) => ({
+    asset: one(assetsTable, {
+        fields: [portsTable.asset_id],
+        references: [assetsTable.id],
+    }),
     stocks: many(stocksTable),
 }))
 
-export const stockRelation = relations(stocksTable, ({ one }) => ({
+export const stocksRelations = relations(stocksTable, ({ one }) => ({
     port: one(portsTable, {
         fields: [stocksTable.port_id],
         references: [portsTable.id],
     }),
 }))
-
-export const portRelation = relations(portsTable, ({ one }) => ({
-    asset: one(assetsTable, {
-        fields: [portsTable.asset_id],
-        references: [assetsTable.id],
-    }),
-}))
-
-// export const portStocksRelations = relations(portsTable, ({ many }) => ({
-//     stocks: many(stocksTable),
-// }))
-
-// export const stockPortRelations = relations(stocksTable, ({ one }) => ({
-//     port: one(portsTable, {
-//         fields: [stocksTable.port_id],
-//         references: [portsTable.id],
-//     }),
-// }))

@@ -23,9 +23,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     const clearAuth = async () => {
+        const { $api } = useNuxtApp()
         try {
             // เรียก API เพื่อลบ Refresh Token Cookie ใน Server อย่างเดียว
-            await $fetch('/api/logout', { method: 'POST' })
+            await $api('/api/logout', { method: 'POST' })
         } catch (error) {
             console.error('Logout API failed', error)
         } finally {

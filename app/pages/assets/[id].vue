@@ -31,9 +31,10 @@ const onCloseModal = () => {
 }
 
 const addPort = async () => {
+    const { $api } = useNuxtApp()
     isLoading.value = true;
     try {
-        const response = await $fetch(`/api/ports`, {
+        const response = await $api(`/api/ports`, {
             method: 'POST',
             body: formPort
         })
@@ -50,9 +51,10 @@ const addPort = async () => {
 };
 
 const updateAsset = async () => {
+    const { $api } = useNuxtApp()
     isLoading.value = true;
     try {
-        const response = await $fetch(`/api/assets/${assetId}`, {
+        const response = await $api(`/api/assets/${assetId}`, {
             method: 'PUT',
             body: form
         })
@@ -80,15 +82,18 @@ const updateAsset = async () => {
             <span>Add Port</span>
         </Button>
     </div>
-    
+
     <div class="flex justify-between items-start">
-        <h2 class="text-2xl font-bold">{{ asset?.name }} <span class="text-gray-500 text-sm">({{ asset?.ports?.length }})</span></h2>
+        <h2 class="text-2xl font-bold">{{ asset?.name }} <span class="text-gray-500 text-sm">({{ asset?.ports?.length
+                }})</span></h2>
         <div>Value: <span class="font-bold text-primary">{{ formatNumber(asset?.value) }}</span></div>
     </div>
-        
+
     <div class="flex justify-between items-center">
         <div class="text-xs">Cost: <span class="font-bold text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
-        <div class="text-xs">Profit: <span :class="{ 'text-green-500': asset?.profitPercentage > 0, 'text-red-500': asset?.profitPercentage < 0 }">{{ formatNumber(asset?.profitAmount) }} ({{ formatNumber(asset?.profitPercentage, 2) }}%)</span></div>
+        <div class="text-xs">Profit: <span
+                :class="{ 'text-green-500': asset?.profitPercentage > 0, 'text-red-500': asset?.profitPercentage < 0 }">{{
+                    formatNumber(asset?.profitAmount) }} ({{ formatNumber(asset?.profitPercentage, 2) }}%)</span></div>
     </div>
 
     <hr class="my-2">
@@ -109,12 +114,12 @@ const updateAsset = async () => {
     </template>
 
     <div class="card flex justify-center">
-        <Dialog v-model:visible="visible" modal header="Add Port" class="w-full max-w-md mx-4"
-            @hide="onCloseModal">
+        <Dialog v-model:visible="visible" modal header="Add Port" class="w-full max-w-md mx-4" @hide="onCloseModal">
             <Form @submit="addPort">
                 <div class="mb-6">
                     <div class="flex flex-col mb-2">
-                        <InputText name="name" type="text" placeholder="Portfolio Name" required v-model="formPort.name" />
+                        <InputText name="name" type="text" placeholder="Portfolio Name" required
+                            v-model="formPort.name" />
                     </div>
                     <div class="flex flex-col mb-2">
                         <InputText name="description" type="text" placeholder="Description"

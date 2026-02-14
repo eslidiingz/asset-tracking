@@ -1,6 +1,5 @@
 import { z } from 'zod'
-import { assetsTable } from '~~/server/database/schema';
-import { useDrizzle } from '~~/server/utils/drizzle';
+import { assetsTable } from '../../database/schema';
 
 const schema = z.object({
     name: z.string(),
@@ -17,7 +16,12 @@ export default defineEventHandler(async (event) => {
             statusMessage: `Asset name is required`,
         })
 
-    const asset: typeof assetsTable.$inferInsert = result.data
+    const userId = requireUserId(event);
+
+    const asset: typeof assetsTable.$inferInsert = {
+        ...result.data,
+        user_id: userId
+    }
 
     const assetCreated = useDrizzle().insert(assetsTable).values(asset).returning().get()
 
