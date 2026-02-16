@@ -12,8 +12,10 @@ const props = defineProps({
 
 const emit = defineEmits(['edit', 'delete'])
 
+// Stores
 const { priceList } = storeToRefs(useStockStore())
 
+// Computed
 const symbolPrice = computed(() => priceList.value.find(s => s.symbol === props.stock.symbol)?.price || 0)
 const symbolCost = computed(() => props.stock.cost * props.stock.amount)
 const symbolValue = computed(() => symbolPrice.value * props.stock.amount)
@@ -22,14 +24,13 @@ const symbolProfitPercentage = computed(() => symbolProfitAmount.value / symbolC
 const symbolRatio = computed(() => symbolCost.value * (1 + (symbolProfitPercentage.value / 100)) / props.portValue * 100)
 
 const profitClass = computed(() => symbolProfitPercentage.value > 0 ? 'text-green-400' : 'text-red-400')
-const ratioClass = computed(() => symbolRatio.value > props.stock.ratio ? 'text-red-400' : 'text-green-400')
 </script>
 
 <template>
     <NuxtLink :to="`/stocks/${stock.id}`">
         <Card class="card-port">
-            <template #title>
-                <div class="flex justify-between items-center">
+            <template #content>
+                <div class="flex justify-between items-center mb-2">
                     <h3>{{ stock.symbol }}</h3>
                     <div class="flex gap-x-4">
                         <div class="flex flex-col gap-y-1 items-end text-xs">
@@ -49,20 +50,13 @@ const ratioClass = computed(() => symbolRatio.value > props.stock.ratio ? 'text-
                     </div>
                 </div>
             </template>
-            <template #subtitle>
+
+            <template #footer>
                 <div class="flex justify-between">
-                    <div>
-                        <p class="text-xs">{{ stock.amount?.toFixed(7) }}</p>
-                    </div>
+                    <p class="text-xs">{{ stock.amount?.toFixed(7) }}</p>
+
                     <div class="flex gap-x-3">
-                        <div class="text-xs flex items-center gap-x-0.5" v-if="stock.ratio">
-                            <Icon name="lucide:pie-chart" :class="ratioClass" />
-                            <div>
-                                <span :class="ratioClass">
-                                    {{ formatNumber(symbolRatio || 0) }}</span>
-                                / <span>{{ stock.ratio || 0 }}</span>%
-                            </div>
-                        </div>
+                        <UiCurrentRatio class="text-xs" :currentRatio="symbolRatio" :targetRatio="stock.ratio" />
                         <Icon name="lucide:edit" class="hover:text-yellow-400" @click.prevent="emit('edit', stock)" />
                         <Icon name="lucide:trash-2" class="hover:text-red-400" @click.prevent="emit('delete', stock)" />
                     </div>

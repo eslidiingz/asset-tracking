@@ -8,7 +8,6 @@ export const assetSchema = z.object({
     ratio: z.number().nullable().optional(),
 })
 
-
 export default class Asset {
     find(id: number) {
         return useDrizzle().query.assetsTable.findFirst({

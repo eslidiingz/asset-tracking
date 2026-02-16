@@ -15,13 +15,12 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 const toast = useToast();
-const _stock = useStock()
-const { isEditMode, form, addStock, updateStock } = _stock
+const { isEditMode, form, createStock, updateStock } = useStock()
 
 const header = computed(() => `${isEditMode.value ? 'Edit' : 'Add'} Stock`)
 
 const onSubmit = async () => {
-    const payload = {
+    let payload = {
         ...form,
         port_id: Number(props.portId)
     }
@@ -29,9 +28,10 @@ const onSubmit = async () => {
     let response;
 
     if (isEditMode.value) {
+        payload = { ...payload, id: form.id }
         response = await updateStock(payload as any)
     } else {
-        response = await addStock(payload as any)
+        response = await createStock(payload as any)
     }
 
     if (response?.success) {
@@ -60,7 +60,7 @@ const onRatioInput = () => {
             <Form @submit="onSubmit" class="flex flex-col gap-2">
 
                 <InputText id="symbol" name="symbol" type="text" placeholder="e.g. NVDA" required v-model="form.symbol"
-                    @input="form.symbol = form.symbol?.toUpperCase()" class="w-full" />
+                    @input="form.symbol = form.symbol?.toUpperCase()" class="w-full" autofocus />
 
                 <InputNumber id="amount" name="amount" placeholder="Quantity owned" :minFractionDigits="0"
                     :maxFractionDigits="8" required v-model="form.amount" class="w-full" />

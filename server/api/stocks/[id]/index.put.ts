@@ -1,34 +1,19 @@
-import { eq } from "drizzle-orm";
-import z from "zod";
-import { stocksTable } from "~~/server/database/schema";
-
-const schema = z.object({
-    port_id: z.number(),
-    symbol: z.string(),
-    amount: z.number(),
-    cost: z.number(),
-    ratio: z.number().optional(),
-})
+import StockModel, { stockSchema } from "~~/server/models/stock.model";
 
 export default defineEventHandler(async (event) => {
-    const stockId = Number(getRouterParam(event, 'id'));
-    const validated = await readValidatedBody(event, body => schema.safeParse(body));
+    const validated = await readValidatedBody(event, body => stockSchema.safeParse(body));
 
     if (!validated.success) {
         return {
             success: false,
-            message: "Some fields are missing",
+            message: "Invalid body requested",
             data: null
         }
     }
 
-    const stock: typeof stocksTable.$inferInsert = validated.data
-    
-    const stockUpdated = useDrizzle().update(stocksTable)
-        .set(stock)
-        .where(eq(stocksTable.id, stockId))
-        .returning()
-        .get();
+    const model = new StockModel;
+    const stockId = Number(getRouterParam(event, 'id'));
+    const stockUpdated = model.update(stockId, validated.data)
 
     return {
         success: true,

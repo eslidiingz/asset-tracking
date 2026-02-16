@@ -33,7 +33,7 @@ export const useStock = () => {
         }
     }
 
-    const addStock = async (stock: Stock) => {
+    const createStock = async (stock: Stock) => {
         isLoading.value = true;
         try {
             const response: ApiResponse = await $api(`/api/stocks`, {
@@ -121,7 +121,7 @@ export const useStock = () => {
         form,
 
         fetchStocks,
-        addStock,
+        createStock,
         updateStock,
         fetchPriceList,
         deleteStock,

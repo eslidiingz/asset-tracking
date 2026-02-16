@@ -1,10 +1,9 @@
 <script setup>
 const route = useRoute();
-const portId = route.params.id;
+const portId = Number(route.params.id);
 
-const confirm = useConfirm();
-const toast = useToast();
-
+// Composables
+const { requireDelete } = useAppConfirm()
 const {
     fetchStocks,
     stocks,
@@ -46,24 +45,9 @@ const onEdit = (stock) => {
 }
 
 const onDelete = (stock) => {
-    confirm.require({
-        message: `Do you want to delete ${stock.symbol} stock?`,
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-            label: 'Cancel',
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptProps: {
-            label: 'Delete',
-            severity: 'danger',
-        },
-        accept: async () => {
-            await deleteStock(stock)
-            toast.add({ severity: 'success', summary: 'Deleted', detail: 'Stock deleted', life: 3000 });
-        },
-    });
+    requireDelete(async () => {
+        await deleteStock(stock)
+    }, `Stock has been deleted`)
 };
 
 const portCost = computed(() => stocks.value.reduce((acc, stock) => acc + stock.cost * stock.amount, 0))
@@ -77,9 +61,9 @@ const portProfitPercentage = computed(() => portProfit.value / portCost.value * 
         <ProgressSpinner stroke-width="5" />
     </div>
 
-    <header class="flex justify-between items-start mb-4">
+    <header class="flex justify-between items-start">
         <UiButtonBack :to="`/assets/${port?.asset_id}`" label="Back to Ports" />
-        <UiButtonAdd @click="visible = true" v-if="stocksRatio < 100" />
+        <UiButtonFloat label="Add Stock" @click="visible = true" />
     </header>
 
     <div class="flex justify-between items-start">
@@ -90,8 +74,8 @@ const portProfitPercentage = computed(() => portProfit.value / portCost.value * 
     <div class="flex flex-col text-xs font-bold">
         <span class="text-gray-400">{{ port?.description }}</span>
         <div class="flex justify-between mt-1">
-            <div class="">Cost: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
-            <div class="">Profit: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
+            <div>Cost: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
+            <div>Profit: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
                 formatNumber(portProfit || 0) }} ({{ formatNumber(portProfitPercentage || 0) }}%)</span></div>
         </div>
     </div>
