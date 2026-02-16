@@ -1,12 +1,12 @@
 import type { Port } from "./port.interface";
 
 export interface Asset {
-    id?: string;
-    user_id?: string;
-    name?: string;
-    description?: string;
-    ratio?: number;
-    sequence?: number;
+    id: number;
+    user_id: number;
+    name: string | null;
+    description: string | null;
+    ratio: number | null;
+    sequence: number | null;
     profitAmount?: number;
     profitPercentage?: number;
     cost?: number;

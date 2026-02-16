@@ -1,14 +1,9 @@
 import { z } from 'zod'
 import { assetsTable } from '../../database/schema';
-
-const schema = z.object({
-    name: z.string(),
-    description: z.string().optional(),
-    ratio: z.number().optional()
-})
+import { assetSchema } from '../../models/asset.model';
 
 export default defineEventHandler(async (event) => {
-    const result = await readValidatedBody(event, body => schema.safeParse(body))
+    const result = await readValidatedBody(event, body => assetSchema.safeParse(body))
 
     if (!result.success)
         throw createError({

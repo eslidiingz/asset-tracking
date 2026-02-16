@@ -4,14 +4,36 @@ import type { Port } from "~/interfaces/port.interface"
 export const usePort = () => {
     const { $api } = useNuxtApp()
     const isLoading = ref<boolean>(false)
+    const form = reactive<Port>({
+        id: undefined as any, // Will be set on edit
+        asset_id: undefined as any,
+        name: null,
+        description: null,
+        ratio: null,
+        sequence: null
+    })
+
     const ports = ref<Port[]>([])
     const port = ref<Port | null>(null)
 
-    const fetchPorts = async () => {
+    const resetForm = () => {
+        form.name = null
+        form.description = null
+        form.ratio = null
+        form.sequence = null
+    }
+
+    const setForm = (p: Port) => {
+        form.name = p.name
+        form.description = p.description
+        form.ratio = p.ratio
+    }
+
+    const fetchPorts = async (assetId?: number) => {
         isLoading.value = true;
         try {
-            // ระบุ generic type ให้ $api เพื่อลดความซับซ้อนของ type inference
-            const response = await $api<ApiResponse>('/api/ports')
+            const uri = assetId ? `/api/ports?asset_id=${assetId}` : `/api/ports`
+            const response = await $api<ApiResponse>(uri)
             ports.value = response.data
         } catch (error) {
             console.error('Failed to fetch ports', error)
@@ -20,12 +42,15 @@ export const usePort = () => {
         }
     }
 
-    const addPort = async (newPort: Port) => {
+    const createPort = async (assetId: number | string) => {
         isLoading.value = true;
         try {
             const response = await $api<ApiResponse>('/api/ports', {
                 method: 'POST',
-                body: newPort
+                body: {
+                    ...form,
+                    asset_id: Number(assetId)
+                }
             })
 
             if (response.success) {
@@ -52,12 +77,12 @@ export const usePort = () => {
         }
     }
 
-    const updatePort = async (updatedPort: Port) => {
+    const updatePort = async (id: number) => {
         isLoading.value = true;
         try {
-            const response = await $api<ApiResponse>(`/api/ports/${updatedPort.id}`, {
+            const response = await $api<ApiResponse>(`/api/ports/${id}`, {
                 method: 'PUT',
-                body: updatedPort
+                body: form
             })
 
             if (response.success) {
@@ -72,10 +97,10 @@ export const usePort = () => {
         }
     }
 
-    const deletePort = async (portToDelete: Port) => {
+    const deletePort = async (id: number) => {
         isLoading.value = true;
         try {
-            const response = await $api<ApiResponse>(`/api/ports/${portToDelete.id}`, {
+            const response = await $api<ApiResponse>(`/api/ports/${id}`, {
                 method: 'DELETE'
             })
 
@@ -93,12 +118,16 @@ export const usePort = () => {
 
     return {
         isLoading,
+        form,
         ports,
         port,
+
         fetchPorts,
-        addPort,
+        createPort,
         findPort,
         updatePort,
         deletePort,
+        resetForm,
+        setForm,
     }
 }

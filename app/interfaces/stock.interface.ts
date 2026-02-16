@@ -1,11 +1,11 @@
 export interface Stock {
-    id: string;
+    id: number;
     port_id: number;
     symbol: string;
     amount: number;
     cost: number;
-    sequence: number;
-    ratio: number;
+    sequence: number | null;
+    ratio: number | null;
     price?: number;
     totalCost?: number;
     profitAmount?: number;
@@ -14,7 +14,7 @@ export interface Stock {
 }
 
 export interface PriceList {
-    id: string;
+    id: number;
     symbol: string;
     price: number;
 }

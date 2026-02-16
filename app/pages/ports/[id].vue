@@ -61,7 +61,7 @@ const onDelete = (stock) => {
         },
         accept: async () => {
             await deleteStock(stock)
-            toast.add({ severity: 'success', summary: 'Deleted', detail: 'Stock removed', life: 3000 });
+            toast.add({ severity: 'success', summary: 'Deleted', detail: 'Stock deleted', life: 3000 });
         },
     });
 };
@@ -78,21 +78,21 @@ const portProfitPercentage = computed(() => portProfit.value / portCost.value * 
     </div>
 
     <header class="flex justify-between items-start mb-4">
-        <ButtonBack :to="`/assets/${port?.asset_id}`" />
-        <ButtonAdd @click="visible = true" v-if="stocksRatio < 100" />
+        <UiButtonBack :to="`/assets/${port?.asset_id}`" label="Back to Ports" />
+        <UiButtonAdd @click="visible = true" v-if="stocksRatio < 100" />
     </header>
 
     <div class="flex justify-between items-start">
         <h2 class="text-2xl font-bold">{{ port?.name }}</h2>
-        <div>Value: <span class="font-bold text-primary">{{ formatNumber(portValue) }}</span></div>
+        <div>Value: <span class="font-bold text-primary">{{ formatNumber(portValue || 0) }}</span></div>
     </div>
 
     <div class="flex flex-col text-xs font-bold">
         <span class="text-gray-400">{{ port?.description }}</span>
         <div class="flex justify-between mt-1">
-            <div class="">Cost: <span class="text-blue-400">{{ formatNumber(portCost) }}</span></div>
+            <div class="">Cost: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
             <div class="">Profit: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
-                formatNumber(portProfit) }} ({{ formatNumber(portProfitPercentage) }}%)</span></div>
+                formatNumber(portProfit || 0) }} ({{ formatNumber(portProfitPercentage || 0) }}%)</span></div>
         </div>
     </div>
 
@@ -103,15 +103,15 @@ const portProfitPercentage = computed(() => portProfit.value / portCost.value * 
     <template v-else>
         <div class="flex justify-between items-center mb-2">
             <div>Portfolio ratio: </div>
-            <div class="text-xs font-mono">{{ formatNumber(stocksRatio) }} / 100%</div>
+            <div class="text-xs font-mono">{{ formatNumber(stocksRatio || 0) }} / 100%</div>
         </div>
 
         <div class="space-y-3 mb-6">
             <div v-for="stock in stocks" :key="stock.id">
-                <CardStock :stock :portValue @edit="onEdit" @delete="onDelete" />
+                <StockCard :stock :portValue @edit="onEdit" @delete="onDelete" />
             </div>
         </div>
     </template>
 
-    <ModalStockForm v-model:visible="visible" :remainingRatio="remainingRatio" :portId @close="onCloseModal" />
+    <StockModalForm v-model:visible="visible" :remainingRatio="remainingRatio" :portId @close="onCloseModal" />
 </template>

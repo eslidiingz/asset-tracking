@@ -29,6 +29,6 @@ const classRatio = computed(() => {
             <Icon name="lucide:chart-pie" :class="classRatio" />
             <span :class="classRatio">{{ currentRatio }}</span> / {{ asset.ratio }}%
         </div>
-        <div class="text-sm text-primary" v-if="asset.value">{{ formatNumber(asset.value) }}</div>
+        <div class="text-sm text-primary" v-if="asset.value">{{ formatNumber(asset.value || 0) }}</div>
     </div>
 </template>

@@ -33,18 +33,18 @@ const ratioClass = computed(() => symbolRatio.value > props.stock.ratio ? 'text-
                     <h3>{{ stock.symbol }}</h3>
                     <div class="flex gap-x-4">
                         <div class="flex flex-col gap-y-1 items-end text-xs">
-                            <div>{{ formatNumber(Number(symbolPrice)) }}</div>
-                            <div v-if="stock.cost" class="text-blue-400">{{ formatNumber(stock.cost) }}</div>
+                            <div>{{ formatNumber(Number(symbolPrice) || 0) }}</div>
+                            <div v-if="stock.cost" class="text-blue-400">{{ formatNumber(stock.cost || 0) }}</div>
                         </div>
                         <div class="flex flex-col gap-y-1 items-end text-xs">
-                            <div>{{ formatNumber(symbolValue) }}</div>
-                            <div v-if="stock.cost" class="text-blue-400">{{ formatNumber(symbolCost) }}</div>
+                            <div>{{ formatNumber(symbolValue || 0) }}</div>
+                            <div v-if="stock.cost" class="text-blue-400">{{ formatNumber(symbolCost || 0) }}</div>
                         </div>
                         <div class="flex flex-col gap-y-1 items-end text-xs">
                             <div :class="`font-bold ${profitClass}`">
-                                {{ formatNumber(symbolProfitPercentage) }}%</div>
+                                {{ formatNumber(symbolProfitPercentage || 0) }}%</div>
                             <div :class="`font-bold ${profitClass}`">
-                                {{ formatNumber(symbolProfitAmount) }}</div>
+                                {{ formatNumber(symbolProfitAmount || 0) }}</div>
                         </div>
                     </div>
                 </div>
@@ -59,8 +59,8 @@ const ratioClass = computed(() => symbolRatio.value > props.stock.ratio ? 'text-
                             <Icon name="lucide:pie-chart" :class="ratioClass" />
                             <div>
                                 <span :class="ratioClass">
-                                    {{ formatNumber(symbolRatio) }}</span>
-                                / <span>{{ stock.ratio }}</span>%
+                                    {{ formatNumber(symbolRatio || 0) }}</span>
+                                / <span>{{ stock.ratio || 0 }}</span>%
                             </div>
                         </div>
                         <Icon name="lucide:edit" class="hover:text-yellow-400" @click.prevent="emit('edit', stock)" />

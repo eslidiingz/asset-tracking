@@ -1,60 +1,46 @@
 <script setup lang="ts">
-const { fetchAssets } = useAsset()
+import type { Asset } from '~/interfaces/asset.interface';
+
+const { fetchAssets, deleteAsset } = useAsset()
 const { assets } = storeToRefs(useAssetStore())
+const { requireDelete } = useAppConfirm()
+
 await fetchAssets();
 
 const visible = ref<boolean>(false);
+const editingAsset = ref<Asset | null>(null);
+
+const onEditAsset = (asset: Asset) => {
+    editingAsset.value = asset;
+    visible.value = true;
+}
+
+const onDeleteAsset = async (asset: Asset) => {
+    const assetId = asset.id
+    if (!assetId) return
+
+    requireDelete(async () => {
+        const result = await deleteAsset(assetId)
+
+        if (result?.success) {
+            await fetchAssets()
+        }
+
+        return result
+    }, 'Asset has been deleted')
+}
 
 const onCloseModal = () => {
     visible.value = false;
+    editingAsset.value = null;
 }
 
 const onUpdateAssets = async () => {
     await fetchAssets();
 }
-
-// const stockStore = useStockStore()
-// const { assets } = storeToRefs(stockStore)
-
-// const { currentRatio } = stockStore
-
-// await stockStore.fetchPriceList()
-
-// const assetsRatio = computed(() => assets.value.reduce((acc, port) => acc + port.ratio, 0))
-// const remainingRatio = computed(() => 100 - assetsRatio.value)
-
-// const assetTotalValue = computed(() => assets.value.reduce((acc, item: any) => acc + item.value, 0))
-
-// const visible = ref<boolean>(false);
-
-// const onCloseModal = () => {
-//     visible.value = false;
-// }
-
-// const onUpdateAssets = async () => {
-//     await stockStore.fetchAssets()
-// }
-
-const addPortfolio = async () => {
-    // const { $api } = useNuxtApp()
-    // isLoading.value = true;
-    // try {
-    //     const response = await $api(`/api/assets`, {
-    //         method: 'POST',
-    //         body: form
-    //     })
-
-    //     if (response.success) {
-    //         onCloseModal();
-    //         await fetchAssets();
-    //     }
-    // } catch (error) {
-    //     console.error('Failed to create portfolio', error)
-    // } finally {
-    //     isLoading.value = false;
-    // }
-};
 </script>
+
+
 
 <template>
     <header class="flex justify-between items-center mb-3">
@@ -62,12 +48,10 @@ const addPortfolio = async () => {
         <div>
             <span>Value: </span>
             <span class="font-bold text-primary">
-                <!-- {{ formatNumber(assetTotalValue) }} -->
+                <!-- {{ formatNumber(assetTotalValue || 0) }} -->
             </span>
         </div>
     </header>
-
-    <!-- <ButtonFloat @click="visible = true" v-if="remainingRatio > 0" /> -->
 
     <hr class="my-2">
 
@@ -76,16 +60,17 @@ const addPortfolio = async () => {
     <template v-else>
         <div class="flex justify-between items-center mb-1">
             <div>Assets ratio: </div>
-            <!-- <div class="text-xs">{{ formatNumber(assetsRatio) }}/100%</div> -->
+            <!-- <div class="text-xs">{{ formatNumber(assetsRatio || 0) }}/100%</div> -->
         </div>
 
         <div class="space-y-2 mb-6">
             <div v-for="asset in assets" :key="asset.id">
-                <CardAsset :asset="asset" />
+                <AssetCard :asset="asset" @edit="onEditAsset(asset)" @delete="onDeleteAsset(asset)" />
             </div>
         </div>
     </template>
 
-    <ButtonFloat @click="visible = true" />
-    <ModalAssetForm v-model:visible="visible" @close="onCloseModal" @update:assets="onUpdateAssets" />
+    <UiButtonFloat @click="visible = true" />
+    <AssetModalForm v-model:visible="visible" :asset="editingAsset" @close="onCloseModal"
+        @update:assets="onUpdateAssets" />
 </template>

@@ -1,21 +1,25 @@
 import type { Asset } from "~/interfaces/asset.interface";
 
 export const useAsset = () => {
+    const { $api } = useNuxtApp()
     const isLoading: Ref<boolean> = ref<boolean>(false);
-    const form: Asset = reactive({})
+    const form = reactive<Omit<Asset, 'id' | 'user_id' | 'sequence'>>({
+        name: null,
+        description: null,
+        ratio: null
+    })
     const { assets } = storeToRefs(useAssetStore())
 
     const resetForm = () => {
-        form.name = undefined;
-        form.description = undefined;
-        form.ratio = undefined;
+        form.name = null;
+        form.description = null;
+        form.ratio = null;
     }
 
     const fetchAssets = async () => {
-        const { $api } = useNuxtApp()
         isLoading.value = true;
         try {
-            const response = await $api(`/api/assets`)
+            const response = await $api<{ success: boolean, data: Asset[] }>(`/api/assets`)
 
             if (response.success) {
                 assets.value = response.data;
@@ -28,11 +32,10 @@ export const useAsset = () => {
     }
 
     const createAsset = async () => {
-        const { $api } = useNuxtApp()
         isLoading.value = true;
         try {
             const response = await $api(`/api/assets`, {
-                method: 'POST',
+                method: 'POST' as any,
                 body: form
             })
 
@@ -46,12 +49,77 @@ export const useAsset = () => {
         }
     }
 
+    const findAsset = async (id: string | number) => {
+        isLoading.value = true;
+        try {
+            const response = await $api(`/api/assets/${id}`)
+
+            if (response.success) {
+                // asset.value = response.data;
+                return response.data;
+            }
+        } catch (error) {
+            console.error('Failed to find asset', error)
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    const updateAsset = async (id: string | number) => {
+        isLoading.value = true;
+        try {
+            const response = await $api(`/api/assets/${id}`, {
+                method: 'PUT' as any,
+                body: form
+            })
+
+            if (response.success) {
+                // await fetchAssets();
+            }
+        } catch (error) {
+            console.error('Failed to update asset', error)
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    const deleteAsset = async (id: string | number) => {
+        isLoading.value = true;
+        try {
+            await $api(`/api/assets/${id}`, {
+                method: 'DELETE' as any
+            })
+
+            return { success: true }
+        } catch (error: any) {
+            console.error('Failed to delete asset', error)
+
+            if (error.data) {
+                return { ...error.data, success: false }
+            }
+
+            return { success: false, message: 'Failed to delete asset' }
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    const setForm = (asset: Asset) => {
+        form.name = asset.name;
+        form.description = asset.description;
+        form.ratio = asset.ratio;
+    }
+
     return {
         isLoading,
         form,
 
         fetchAssets,
         createAsset,
+        findAsset,
+        updateAsset,
+        deleteAsset,
         resetForm,
+        setForm,
     }
 }
