@@ -20,6 +20,14 @@ export default defineNuxtPlugin(() => {
 
                 if (isAuthPath) return
 
+                // พยายาม Refresh เฉพาะเมื่อเรามี Token เดิมอยู่ (แปลว่าหมดอายุ)
+                // ถ้าไม่มี Token เลย แปลว่ายังไม่ได้ Login จึงไม่ควรทำ Refresh
+                if (!authStore.accessToken) {
+                    await authStore.clearAuth()
+                    navigateTo('/login')
+                    return
+                }
+
                 const newToken = await authStore.refreshToken()
                 if (!newToken) {
                     await authStore.clearAuth()

@@ -5,8 +5,6 @@ const portId = Number(route.params.id);
 // Composables
 const { requireDelete } = useAppConfirm()
 const {
-    fetchStocks,
-    // stocks,
     isLoading,
     ratio: stocksRatio,
     remainingRatio,
@@ -17,13 +15,26 @@ const {
     deleteStock
 } = useStock()
 
-// await fetchStocks(portId)
-
-const { findPort, port } = usePort()
+const { findPort, port: portData } = usePort()
 await findPort(portId)
 
+// Stores
+const { assets } = useStockStore()
+
+// Computed
+const asset = computed(() => assets.find(asset => asset.id === portData.value.asset_id))
+const port = computed(() => asset.value?.ports?.find(port => port.id === portId))
+const stocks = computed(() => port.value?.stocks)
+
+const portCost = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + stock.cost * stock.amount, 0) || 0)
+const portValue = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + (findSymbol(stock.symbol)?.price || 0) * stock.amount, 0) || 0)
+const portProfit = computed(() => portValue.value - portCost.value)
+const portProfitPercentage = computed(() => portProfit.value / portCost.value * 100)
+
+// States
 const visible = ref(false);
 
+// Methods
 const onCloseModal = () => {
     resetForm();
     visible.value = false;
@@ -47,10 +58,7 @@ const onDelete = (stock) => {
     }, `Stock has been deleted`)
 };
 
-const portCost = computed(() => port.value.stocks.reduce((acc, stock) => acc + stock.cost * stock.amount, 0))
-const portValue = computed(() => port.value.stocks.reduce((acc, stock) => acc + (findSymbol(stock.symbol)?.price || 0) * stock.amount, 0))
-const portProfit = computed(() => portValue.value - portCost.value)
-const portProfitPercentage = computed(() => portProfit.value / portCost.value * 100)
+
 </script>
 
 <template>

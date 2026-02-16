@@ -31,14 +31,14 @@ const onDeletePort = async (port: Port) => {
     requireDelete(async () => {
         const result = await deletePort(portId)
         if (result?.success) {
-            // await fetchPorts(Number(assetId))
+            stockStore.fetchAssets();
         }
         return result
     }, 'Portfolio has been deleted')
 }
 
 const onUpdatePorts = async () => {
-    // await fetchPorts(Number(assetId));
+    stockStore.fetchAssets();;
 }
 
 const onCloseModal = () => {

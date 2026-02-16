@@ -10,6 +10,11 @@ export const useApiFetch: typeof useFetch = (url, options = {}) => {
         },
         async onResponseError({ response }) {
             if (response.status === 401) {
+                if (!authStore.accessToken) {
+                    await authStore.clearAuth()
+                    navigateTo('/login')
+                    return
+                }
                 const newToken = await authStore.refreshToken()
                 if (!newToken) {
                     await authStore.clearAuth()

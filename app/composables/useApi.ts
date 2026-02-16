@@ -20,6 +20,13 @@ export const useApi = () => {
 
                 if (isAuthPath) return
 
+                // พยายาม Refresh เฉพาะเมื่อเรามี Token เดิมอยู่ (แปลว่าหมดอายุ)
+                if (!authStore.accessToken) {
+                    await authStore.clearAuth()
+                    navigateTo('/login')
+                    return
+                }
+
                 // พยายาม Refresh Token
                 const newToken = await authStore.refreshToken()
 
