@@ -7,8 +7,9 @@ interface User {
 
 export const useAuthStore = defineStore('auth', () => {
     // ใช้ useCookie เพื่อให้ Server-side มองเห็นสถานะการ Login ด้วย
+    // เพิ่ม maxAge เป็น 7 วัน เพื่อให้สามารถทำ Silent Refresh ได้โดยหน้าเว็บไม่เด้งออกไป Login ก่อน
     const accessToken = useCookie<string | null>('asset-tracking-access-token', {
-        maxAge: 60 * 15, // 15 นาที ตามอายุ Access Token
+        maxAge: 60 * 60 * 24 * 7, // 7 วัน (ตามอายุ Refresh Token)
         sameSite: 'lax'
     })
 
@@ -36,6 +37,33 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    // ฟังก์ชันสำหรับ Refresh Token
+    let refreshPromise: Promise<string | null> | null = null
+    const refreshToken = async (): Promise<string | null> => {
+        if (refreshPromise) return refreshPromise
+
+        refreshPromise = (async () => {
+            try {
+                const response = await $fetch<{ success: boolean, access_token: string }>('/api/refresh', {
+                    method: 'POST'
+                })
+
+                if (response.success && response.access_token) {
+                    accessToken.value = response.access_token
+                    return response.access_token
+                }
+                return null
+            } catch (error) {
+                console.error('Refresh token failed:', error)
+                return null
+            } finally {
+                refreshPromise = null
+            }
+        })()
+
+        return refreshPromise
+    }
+
     const isAuthenticated = computed(() => !!accessToken.value)
 
     return {
@@ -43,6 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         setTokens,
         clearAuth,
+        refreshToken,
         isAuthenticated
     }
 })

@@ -14,11 +14,14 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+// Composables
 const toast = useToast();
-const { isEditMode, form, createStock, updateStock } = useStock()
+const { isEditMode, form, isLoading, createStock, updateStock } = useStock()
 
+// Computed
 const header = computed(() => `${isEditMode.value ? 'Edit' : 'Add'} Stock`)
 
+// Methods
 const onSubmit = async () => {
     let payload = {
         ...form,
@@ -35,9 +38,8 @@ const onSubmit = async () => {
     }
 
     if (response?.success) {
-        visible.value = false;
         emit('close');
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Stock saved successfully', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Success', detail: `${isEditMode.value ? 'Stock has been updated' : 'Stock has been created'}`, life: 3000 });
     } else {
         toast.add({
             severity: 'error',
@@ -75,7 +77,7 @@ const onRatioInput = () => {
 
                 <div class="flex justify-between gap-3 mt-4">
                     <Button type="button" label="Cancel" severity="secondary" @click="visible = false"></Button>
-                    <Button type="submit" severity="primary" class="px-6">
+                    <Button type="submit" severity="primary" class="px-6" :loading="isLoading">
                         <Icon name="lucide:save" />
                         <span>Save</span>
                     </Button>

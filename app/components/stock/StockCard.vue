@@ -27,7 +27,7 @@ const profitClass = computed(() => symbolProfitPercentage.value > 0 ? 'text-gree
 </script>
 
 <template>
-    <NuxtLink :to="`/stocks/${stock.id}`">
+    <NuxtLink :to="`#`">
         <Card class="card-port">
             <template #content>
                 <div class="flex justify-between items-center mb-2">

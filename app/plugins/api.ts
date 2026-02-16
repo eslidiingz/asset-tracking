@@ -10,9 +10,21 @@ export default defineNuxtPlugin(() => {
                 } as any
             }
         },
-        onResponseError({ response }) {
+        async onResponseError({ response, options, request }) {
             if (response.status === 401) {
-                // Option: deal with unauthorized
+                // อย่าทำ refresh ถ้ากำลังเรียก api/refresh หรือ login หรือ logout อยู่แล้ว
+                const url = request.toString()
+                const isAuthPath = url.includes('/api/refresh') ||
+                    url.includes('/api/login') ||
+                    url.includes('/api/logout')
+
+                if (isAuthPath) return
+
+                const newToken = await authStore.refreshToken()
+                if (!newToken) {
+                    await authStore.clearAuth()
+                    navigateTo('/login')
+                }
             }
         }
     })

@@ -10,11 +10,7 @@ const { currentRatio, targetRatio } = defineProps({
     }
 })
 
-const ratioClass = computed(() => {
-    if (currentRatio > targetRatio) {
-        return 'text-red-400'
-    }
-})
+const ratioClass = computed(() => (currentRatio > targetRatio) ? 'text-red-400' : '')
 </script>
 
 <template>

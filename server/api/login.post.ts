@@ -38,11 +38,11 @@ export default defineEventHandler(async (event) => {
         username: user.username,
     }
 
-    // 1. สร้าง Access Token (อายุสั้น เช่น 15 นาที)
+    // 1. สร้าง Access Token (อายุ 1 ชั่วโมง)
     const accessToken = jwt.sign(
         userCredential,
         process.env.JWT_ACCESS_SECRET!,
-        { expiresIn: '15m' }
+        { expiresIn: '1h' }
     );
 
     // 2. สร้าง Refresh Token (อายุยาว เช่น 7 วัน)
