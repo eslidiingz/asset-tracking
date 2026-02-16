@@ -1,24 +1,24 @@
 <script setup lang="ts">
-const { currentRatio, targetRatio } = defineProps({
-    currentRatio: {
+const { value, target } = defineProps({
+    value: {
         type: Number,
         required: true
     },
-    targetRatio: {
+    target: {
         type: Number,
         required: true
     }
 })
 
-const ratioClass = computed(() => (currentRatio > targetRatio) ? 'text-red-400' : '')
+const ratioClass = computed(() => (value > target) ? 'text-red-400' : '')
 </script>
 
 <template>
     <div :class="`${ratioClass} flex items-center gap-x-0.5`">
         <Icon name="lucide:pie-chart" />
-        <span>{{ formatNumber(currentRatio) }}</span>
-        <span v-if="targetRatio">
-            / {{ formatNumber(targetRatio) }}
+        <span>{{ formatNumber(value, 2) }}</span>
+        <span v-if="target">
+            / {{ formatNumber(target, 2) }}
         </span>
         <span>%</span>
     </div>

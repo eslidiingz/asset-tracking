@@ -2,7 +2,7 @@ import type { Port } from "./port.interface";
 
 export interface Asset {
     id: number;
-    user_id: number;
+    user_id?: number;
     name: string | null;
     description: string | null;
     ratio: number | null;

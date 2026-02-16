@@ -6,7 +6,7 @@ const portId = Number(route.params.id);
 const { requireDelete } = useAppConfirm()
 const {
     fetchStocks,
-    stocks,
+    // stocks,
     isLoading,
     ratio: stocksRatio,
     remainingRatio,
@@ -17,7 +17,7 @@ const {
     deleteStock
 } = useStock()
 
-await fetchStocks(portId)
+// await fetchStocks(portId)
 
 const { findPort, port } = usePort()
 await findPort(portId)
@@ -47,8 +47,8 @@ const onDelete = (stock) => {
     }, `Stock has been deleted`)
 };
 
-const portCost = computed(() => stocks.value.reduce((acc, stock) => acc + stock.cost * stock.amount, 0))
-const portValue = computed(() => stocks.value.reduce((acc, stock) => acc + (findSymbol(stock.symbol)?.price || 0) * stock.amount, 0))
+const portCost = computed(() => port.value.stocks.reduce((acc, stock) => acc + stock.cost * stock.amount, 0))
+const portValue = computed(() => port.value.stocks.reduce((acc, stock) => acc + (findSymbol(stock.symbol)?.price || 0) * stock.amount, 0))
 const portProfit = computed(() => portValue.value - portCost.value)
 const portProfitPercentage = computed(() => portProfit.value / portCost.value * 100)
 </script>

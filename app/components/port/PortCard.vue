@@ -2,7 +2,7 @@
 import type { Port } from '~/interfaces/port.interface';
 import type { Asset } from '~/interfaces/asset.interface';
 
-const props = defineProps({
+const { port, asset } = defineProps({
     port: {
         type: Object as PropType<Port>,
         required: true
@@ -16,7 +16,14 @@ const props = defineProps({
 const emit = defineEmits(['edit', 'delete'])
 
 const stockStore = useStockStore();
-const { currentRatio } = stockStore;
+
+const portValueNum = computed(() => {
+    return stockStore.portValue(port)
+})
+
+const currentRatio = computed(() => {
+    return stockStore.currentRatio(portValueNum.value, asset?.value || 0)
+})
 </script>
 
 <template>
@@ -27,11 +34,10 @@ const { currentRatio } = stockStore;
                     <div class="flex justify-between items-center">
                         <h3 class="font-bold text-lg text-white group-hover:text-primary transition-colors">
                             {{ port.name }}
-                            <span class="text-gray-500 text-sm font-normal" v-if="port?.stocks?.length">
-                                ({{ port?.stocks.length }})
-                            </span>
                         </h3>
-                        <div class="flex space-x-1 items-center">
+
+                        <UiCurrentRatio class="text-sm" :value="currentRatio" :target="port.ratio || 0" />
+                        <!-- <div class="flex space-x-1 items-center">
                             <Icon name="lucide:chart-pie" class="text-base"
                                 :class="{ 'text-red-400': currentRatio(port?.value || 0, asset?.value || 0) > (port.ratio || 0) }" />
                             <span class="text-sm font-mono text-gray-300">
@@ -40,8 +46,9 @@ const { currentRatio } = stockStore;
                                     {{ formatNumber(currentRatio(port?.value || 0, asset?.value || 0), 2) }}
                                 </span> / {{ port.ratio || 0 }}%
                             </span>
-                        </div>
+                        </div> -->
                     </div>
+
                 </template>
 
                 <template #subtitle v-if="port.description">
@@ -72,17 +79,22 @@ const { currentRatio } = stockStore;
 
                 <template #footer>
                     <div class="flex justify-between items-center border-t border-gray-700/30 mt-3 pt-2">
+                        <UiTag v-if="port?.stocks">
+                            {{ `${port?.stocks?.length} Stock${(port?.stocks?.length || 0) !== 1 ? 's' : ''}` }}
+                        </UiTag>
                         <!-- Action buttons with larger hit areas -->
-                        <button @click.stop.prevent="emit('delete')"
-                            class="p-3 -m-3 text-gray-500 hover:text-red-400 transition-colors flex items-center justify-center outline-none"
-                            title="Delete Portfolio">
-                            <Icon name="lucide:trash-2" class="text-xl" />
-                        </button>
-                        <button @click.stop.prevent="emit('edit')"
-                            class="p-3 -m-3 text-gray-500 hover:text-primary transition-colors flex items-center justify-center outline-none"
-                            title="Edit Portfolio">
-                            <Icon name="lucide:edit" class="text-xl" />
-                        </button>
+                        <div class="flex items-center gap-x-2">
+                            <button @click.stop.prevent="emit('delete')"
+                                class="text-gray-500 hover:text-red-400 transition-colors flex items-center justify-center outline-none"
+                                title="Delete Portfolio">
+                                <Icon name="lucide:trash-2" class="text-xl" />
+                            </button>
+                            <button @click.stop.prevent="emit('edit')"
+                                class="text-gray-500 hover:text-primary transition-colors flex items-center justify-center outline-none"
+                                title="Edit Portfolio">
+                                <Icon name="lucide:edit" class="text-xl" />
+                            </button>
+                        </div>
                     </div>
                 </template>
             </Card>

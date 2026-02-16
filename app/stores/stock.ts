@@ -1,4 +1,5 @@
-import type { PriceList } from "~/interfaces/stock.interface"
+import type { PriceList, Stock } from "~/interfaces/stock.interface"
+import type { Port } from "~/interfaces/port.interface"
 
 interface Asset {
     id: number
@@ -13,39 +14,9 @@ interface Asset {
     ports: Port[]
 }
 
-interface Port {
-    id: number
-    asset_id: number
-    name: string
-    description: string
-    ratio: number
-    sequence: number
-    cost?: number
-    value?: number
-    profitAmount?: number
-    profitPercentage?: number
-    stocks: Stock[]
-}
-
-interface Stock {
-    id: number
-    port_id: number
-    symbol: string
-    amount: number
-    cost: number
-    ratio: number
-    price?: number
-    totalCost?: number
-    value?: number
-    profitAmount?: number
-    profitPercentage?: number
-}
-
 export const useStockStore = defineStore('stock', () => {
     const priceList = ref<PriceList[]>([])
     const assets = ref<Asset[]>([])
-
-    const asset = ref<Asset | null>(null)
 
     const fetchPriceList = async () => {
         if (priceList.value.length > 0) return
@@ -67,7 +38,7 @@ export const useStockStore = defineStore('stock', () => {
 
         assets.value = _assets.map((asset) => {
             const ports = asset.ports.map((port) => {
-                const stocks = port.stocks.map((stock) => {
+                const stocks = (port.stocks || []).map((stock) => {
                     return {
                         ...stock,
                         price: stockPrice(stock),
@@ -109,8 +80,10 @@ export const useStockStore = defineStore('stock', () => {
     const assetProfitAmount = (ports: Port[]) => assetValue(ports) - assetTotalCost(ports)
     const assetProfitPercentage = (ports: Port[]) => assetTotalCost(ports) > 0 ? (assetProfitAmount(ports) / assetTotalCost(ports)) * 100 : 0
 
-    const portTotalCost = (port: Port) => port.stocks.reduce((acc, stock) => acc + stock.cost * stock.amount, 0)
-    const portValue = (port: Port) => port.stocks.reduce((acc, stock) => acc + stockValue(stock), 0)
+    const portTotalCost = (port: Port) => (port.stocks || []).reduce((acc, stock) => acc + (stock.cost * stock.amount), 0)
+    const portValue = (port: Port) => {
+        return (port.stocks || []).reduce((acc, stock) => acc + stockValue(stock), 0)
+    }
 
     const portProfitAmount = (port: Port) => portValue(port) - portTotalCost(port)
     const portProfitPercentage = (port: Port) => portProfitAmount(port) / portTotalCost(port) * 100
@@ -126,8 +99,10 @@ export const useStockStore = defineStore('stock', () => {
     return {
         priceList,
         assets,
+
         fetchPriceList,
         fetchAssets,
-        currentRatio
+        currentRatio,
+        portValue
     }
 })

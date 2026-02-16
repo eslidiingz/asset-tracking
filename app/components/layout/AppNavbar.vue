@@ -1,8 +1,14 @@
 <script setup lang="ts">
-const authStore = useAuthStore()
-const { user } = storeToRefs(authStore)
+// Router
 const router = useRouter()
 
+// Stores
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+const { fetchAssets } = useStockStore();
+await fetchAssets();
+
+// Methods
 const handleLogout = async () => {
     await authStore.clearAuth()
     router.push('/login')

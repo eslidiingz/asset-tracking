@@ -28,10 +28,8 @@ const onCardClick = (event: Event) => {
                             {{ asset.name }}
                         </h3>
                         <div class="flex items-center gap-2 mt-1">
-                            <span
-                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary">
-                                {{ asset?.ports?.length || 0 }} Port{{ (asset?.ports?.length || 0) !== 1 ? 's' : '' }}
-                            </span>
+                            <UiTag>{{ `${asset?.ports?.length} Port${(asset?.ports?.length || 0) !== 1 ? 's' : ''}` }}
+                            </UiTag>
                             <span v-if="asset.ratio" class="text-xs text-gray-500">
                                 Target: {{ asset.ratio }}%
                             </span>
