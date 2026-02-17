@@ -1,15 +1,29 @@
 <script setup lang="ts">
 import type { Asset } from '~/interfaces/asset.interface';
 
-const { fetchAssets, deleteAsset } = useAsset()
-const { assets } = storeToRefs(useAssetStore())
+// Stores
+const stockStore = useStockStore()
+const { assets } = storeToRefs(stockStore)
+await stockStore.fetchAssets()
+
+// Composables
+const { deleteAsset } = useAsset()
 const { requireDelete } = useAppConfirm()
 
-await fetchAssets();
-
+// States
 const visible = ref<boolean>(false);
 const editingAsset = ref<Asset | null>(null);
 
+// Computed
+const assetsRatio = computed(() => {
+    return assets.value?.reduce((acc, asset) => acc + asset.ratio, 0) || 0
+})
+
+const assetsTrackingValue = computed(() => {
+    return assets.value?.reduce((acc, asset) => acc + (asset.value || 0), 0) || 0
+})
+
+// Methods
 const onEditAsset = (asset: Asset) => {
     editingAsset.value = asset;
     visible.value = true;
@@ -23,7 +37,7 @@ const onDeleteAsset = async (asset: Asset) => {
         const result = await deleteAsset(assetId)
 
         if (result?.success) {
-            await fetchAssets()
+            await stockStore.fetchAssets()
         }
 
         return result
@@ -36,31 +50,21 @@ const onCloseModal = () => {
 }
 
 const onUpdateAssets = async () => {
-    await fetchAssets();
+    await stockStore.fetchAssets();
 }
 </script>
 
 
 
 <template>
-    <header class="flex justify-between items-center mb-3">
-        <h2 class="text-2xl font-bold">My Assets</h2>
-        <div>
-            <span>Value: </span>
-            <span class="font-bold text-primary">
-                <!-- {{ formatNumber(assetTotalValue || 0) }} -->
-            </span>
-        </div>
-    </header>
-
-    <hr class="my-2">
+    <AssetTrackingHeader :value="assetsTrackingValue" />
 
     <PortEmpty v-if="assets?.length === 0" />
 
     <template v-else>
         <div class="flex justify-between items-center mb-1">
             <div>Assets ratio: </div>
-            <!-- <div class="text-xs">{{ formatNumber(assetsRatio || 0) }}/100%</div> -->
+            <div class="text-xs">{{ formatNumber(assetsRatio) }}/100%</div>
         </div>
 
         <div class="space-y-2 mb-6">

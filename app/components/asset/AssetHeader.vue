@@ -24,7 +24,7 @@ const classProfit = computed(() => {
         </div>
 
         <div class="flex justify-between items-center">
-            <div class="text-sm">Cost: <span class="font-bold text-blue-400">{{ formatNumber(asset?.cost || 0) }}</span>
+            <div class="text-sm">Cost: <span class="text-blue-400">{{ formatNumber(asset?.cost || 0) }}</span>
             </div>
             <div class="flex items-center gap-0.5 text-sm">
                 <span>Profilt: </span>

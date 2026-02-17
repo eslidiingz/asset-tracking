@@ -69,12 +69,10 @@ const onDelete = (stock) => {
         <ProgressSpinner stroke-width="5" />
     </div>
 
-    <PortHeader :port :portValue :portCost :portProfit :portProfitPercentage />
+    <PortHeader :port :portValue :portCost :portProfit :portProfitPercentage :stocksRatio />
 
-    <PortEmpty title="No Stocks" description="Add a stock to get started" v-if="stocks?.length === 0" />
+    <PortEmpty v-if="stocks?.length === 0" title="No Stocks" description="Add a stock to get started" />
     <template v-else>
-        <PortStockRatio :stocksRatio />
-
         <div class="space-y-2 mb-2">
             <div v-for="stock in stocks" :key="stock.id">
                 <StockCard :stock :portValue @edit="onEdit" @delete="onDelete" />

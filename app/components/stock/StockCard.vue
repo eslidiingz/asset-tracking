@@ -31,7 +31,10 @@ const profitClass = computed(() => symbolProfitPercentage.value > 0 ? 'text-gree
         <Card class="card-port">
             <template #content>
                 <div class="flex justify-between items-center mb-2">
-                    <h3>{{ stock.symbol }}</h3>
+                    <div>
+                        <h3>{{ stock.symbol }}</h3>
+                        <p class="text-xs">{{ stock.amount?.toFixed(7) }}</p>
+                    </div>
                     <div class="flex gap-x-4">
                         <div class="flex flex-col gap-y-1 items-end text-xs">
                             <div>{{ formatNumber(Number(symbolPrice) || 0) }}</div>
@@ -53,12 +56,11 @@ const profitClass = computed(() => symbolProfitPercentage.value > 0 ? 'text-gree
 
             <template #footer>
                 <div class="flex justify-between">
-                    <p class="text-xs">{{ stock.amount?.toFixed(7) }}</p>
+                    <UiCurrentRatio class="text-xs" :value="symbolRatio" :target="stock.ratio" />
 
                     <div class="flex gap-x-3">
-                        <UiCurrentRatio class="text-xs" :currentRatio="symbolRatio" :targetRatio="stock.ratio" />
-                        <Icon name="lucide:edit" class="hover:text-yellow-400" @click.prevent="emit('edit', stock)" />
                         <Icon name="lucide:trash-2" class="hover:text-red-400" @click.prevent="emit('delete', stock)" />
+                        <Icon name="lucide:edit" class="hover:text-yellow-400" @click.prevent="emit('edit', stock)" />
                     </div>
                 </div>
             </template>

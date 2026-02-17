@@ -18,8 +18,7 @@ const ratioClass = computed(() => (value > target) ? 'text-red-400' : '')
         <Icon name="lucide:pie-chart" />
         <span>{{ formatNumber(value, 2) }}</span>
         <span v-if="target">
-            / {{ formatNumber(target, 2) }}
+            / {{ formatNumber(target, 2) }}%
         </span>
-        <span>%</span>
     </div>
 </template>

@@ -7,29 +7,38 @@ const props = defineProps<{
     portCost: number;
     portProfit: number;
     portProfitPercentage: number;
+    stocksRatio: number;
 }>();
 
 const stocksCount = computed(() => props.port?.stocks?.length || 0)
 </script>
 
 <template>
-    <header class="border-b border-gray-700 mb-3 pb-3">
+    <header class="mb-2">
         <UiButtonBack :to="`/assets/${props.port?.asset_id}`" label="Back to Ports" />
 
-        <div class="flex justify-between items-start">
-            <h2 class="text-2xl font-bold">{{ props.port?.name }}
-                <UiTag>{{ stocksCount }} Stock{{ stocksCount === 1 ? '' : 's' }}</UiTag>
-            </h2>
-            <div>Value: <span class="font-bold text-primary">{{ formatNumber(portValue || 0) }}</span></div>
-        </div>
+        <h2 class="text-2xl font-bold mb-2">{{ props.port?.name }}
+            <UiTag class="mx-1">{{ stocksCount }} Stock{{ stocksCount === 1 ? '' : 's' }}</UiTag>
+        </h2>
 
-        <div class="flex flex-col text-xs font-bold">
-            <span class="text-gray-400">{{ props.port?.description }}</span>
-            <div class="flex justify-between mt-1">
-                <div>Cost: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
-                <div>Profit: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
-                    formatNumber(portProfit || 0) }} ({{ formatNumber(portProfitPercentage || 0) }}%)</span></div>
+        <div class="text-gray-400 text-sm">{{ props.port?.description }}</div>
+
+        <div class="flex justify-between text-sm border-y border-gray-700 py-2">
+            <div>
+                <div>Value: <span class="text-primary">{{ formatNumber(portValue || 0) }}</span></div>
+                <div class="flex items-center gap-0.5">
+                    <Icon name="lucide:pie-chart" />
+                    {{ formatNumber(stocksRatio || 0) }} / 100%
+                </div>
             </div>
+
+            <div>
+                <div>Profit: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
+                    formatNumber(portProfit || 0) }} ({{ formatNumber(portProfitPercentage || 0) }}%)</span>
+                </div>
+                <div>Cost: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
+            </div>
+
         </div>
     </header>
 </template>

@@ -11,5 +11,5 @@ const portLabel = computed(() => {
 </script>
 
 <template>
-    <UiTag>{{ portLabel }}</UiTag>
+    <UiTag class="mx-1">{{ portLabel }}</UiTag>
 </template>

@@ -1,20 +1,10 @@
 export const formatNumber = (value: number | null | undefined, decimalDigits: number = 2): string => {
-    if (value === null || value === undefined || isNaN(value)) {
-        return (0).toLocaleString('en-US', {
-            minimumFractionDigits: decimalDigits,
-            maximumFractionDigits: decimalDigits,
-        });
-    }
+    const num = (value === null || value === undefined || isNaN(value)) ? 0 : value;
 
-    if (value === 0) return (0).toLocaleString('en-US', {
+    const formattedValue = num.toLocaleString('en-US', {
         minimumFractionDigits: decimalDigits,
         maximumFractionDigits: decimalDigits,
     });
 
-    const formattedValue = value.toLocaleString('en-US', {
-        minimumFractionDigits: decimalDigits,
-        maximumFractionDigits: decimalDigits,
-    });
-
-    return formattedValue;
+    return formattedValue.endsWith('.00') ? formattedValue.replace('.00', '') : formattedValue;
 };

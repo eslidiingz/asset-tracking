@@ -22,24 +22,35 @@ const onCardClick = (event: Event) => {
         @click="onCardClick">
         <Card class="card-port overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm">
             <template #title>
-                <div class="flex justify-between items-start gap-2">
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 truncate">
-                            {{ asset.name }}
-                        </h3>
-                        <div class="flex items-center gap-2 mt-1">
-                            <UiTag>{{ `${asset?.ports?.length} Port${(asset?.ports?.length || 0) !== 1 ? 's' : ''}` }}
-                            </UiTag>
-                            <span v-if="asset.ratio" class="text-xs text-gray-500">
-                                Target: {{ asset.ratio }}%
-                            </span>
+                <div class="flex justify-between">
+                    <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 truncate">
+                        {{ asset.name }}
+                        <UiTag>{{ `${asset?.ports?.length} Port${(asset?.ports?.length || 0) !== 1 ? 's' : ''}` }}
+                        </UiTag>
+                    </h3>
+                    <AssetCardActions @edit="emit('edit')" @delete="emit('delete')" class="asset-actions" />
+                </div>
+            </template>
+
+            <template #content>
+                <div class="flex justify-between items-center gap-2">
+                    <div class="flex-1 min-w-0 text-sm">
+                        <div class="flex justify-between">
+                            <div>Value: <span class="text-primary">{{ formatNumber(asset?.value) }}</span></div>
+                            <UiCurrentRatio :value="asset.ratio" :target="100" />
+                        </div>
+
+                        <div class="flex justify-between">
+                            <div>Profit: <span class="text-green-400">{{ formatNumber(asset?.profitAmount) }} ({{
+                                formatNumber(asset?.profitPercentage) }}%)</span></div>
+                            <div>Cost: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-1 shrink-0">
-                        <AssetRatio :asset />
+
                         <!-- Action Molecule: Handles Edit/Delete operations -->
-                        <AssetCardActions @edit="emit('edit')" @delete="emit('delete')" class="asset-actions" />
+
                     </div>
                 </div>
             </template>
