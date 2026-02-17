@@ -18,6 +18,7 @@ const { assets } = storeToRefs(stockStore)
 // Computed
 const asset = computed(() => assets.value.find((asset) => asset.id === Number(assetId)))
 const ports = computed(() => asset.value?.ports)
+const portRatio = computed(() => ports.value?.reduce((acc, port) => acc + (port.ratio || 0), 0) || 0)
 
 const onEditPort = (port: Port) => {
     editingPort.value = port;
@@ -38,7 +39,7 @@ const onDeletePort = async (port: Port) => {
 }
 
 const onUpdatePorts = async () => {
-    stockStore.fetchAssets();;
+    stockStore.fetchAssets();
 }
 
 const onCloseModal = () => {
@@ -50,12 +51,12 @@ const onCloseModal = () => {
 <template>
     <AssetHeader v-if="asset" :asset="asset" @add-port="visible = true" />
 
-    <PortEmpty title="No Sub Portfolios" description="Add a sub portfolio to get started" v-if="ports?.length === 0" />
+    <PortEmpty v-if="ports?.length === 0" title="No Sub Portfolios" description="Add a sub portfolio to get started" />
 
     <template v-else>
         <div class="flex justify-between items-center mb-1">
-            <div>Portfolio ratio: </div>
-            <!-- <div class="text-xs">{{ formatNumber(assetsRatio || 0) }}/100%</div> -->
+            <div>Port target ratio: </div>
+            <div class="text-xs">{{ formatNumber(portRatio) }}/100%</div>
         </div>
 
         <div class="space-y-2 mb-6">

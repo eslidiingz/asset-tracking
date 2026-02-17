@@ -14,6 +14,9 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+// Stores
+const stockStore = useStockStore()
+
 // Composables
 const toast = useToast();
 const { isEditMode, form, isLoading, createStock, updateStock } = useStock()
@@ -38,8 +41,9 @@ const onSubmit = async () => {
     }
 
     if (response?.success) {
-        emit('close');
         toast.add({ severity: 'success', summary: 'Success', detail: `${isEditMode.value ? 'Stock has been updated' : 'Stock has been created'}`, life: 3000 });
+        await stockStore.fetchAssets()
+        emit('close');
     } else {
         toast.add({
             severity: 'error',

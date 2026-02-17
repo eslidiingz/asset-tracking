@@ -6,7 +6,6 @@ const portId = Number(route.params.id);
 const { requireDelete } = useAppConfirm()
 const {
     isLoading,
-    ratio: stocksRatio,
     remainingRatio,
     resetForm,
     isEditMode,
@@ -19,10 +18,11 @@ const { findPort, port: portData } = usePort()
 await findPort(portId)
 
 // Stores
-const { assets } = useStockStore()
+const stockStore = useStockStore()
+const { assets } = storeToRefs(stockStore)
 
 // Computed
-const asset = computed(() => assets.find(asset => asset.id === portData.value.asset_id))
+const asset = computed(() => assets.value?.find(asset => asset.id === portData.value.asset_id))
 const port = computed(() => asset.value?.ports?.find(port => port.id === portId))
 const stocks = computed(() => port.value?.stocks)
 
@@ -30,6 +30,8 @@ const portCost = computed(() => port.value?.stocks?.reduce((acc, stock) => acc +
 const portValue = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + (findSymbol(stock.symbol)?.price || 0) * stock.amount, 0) || 0)
 const portProfit = computed(() => portValue.value - portCost.value)
 const portProfitPercentage = computed(() => portProfit.value / portCost.value * 100)
+
+const stocksRatio = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + stock.ratio, 0) || 0)
 
 // States
 const visible = ref(false);
@@ -55,6 +57,7 @@ const onEdit = (stock) => {
 const onDelete = (stock) => {
     requireDelete(async () => {
         await deleteStock(stock)
+        await stockStore.fetchAssets()
     }, `Stock has been deleted`)
 };
 
@@ -66,33 +69,11 @@ const onDelete = (stock) => {
         <ProgressSpinner stroke-width="5" />
     </div>
 
-    <header class="border-b border-gray-700 mb-3 pb-3">
-        <UiButtonBack :to="`/assets/${port?.asset_id}`" label="Back to Ports" />
-
-        <div class="flex justify-between items-start">
-            <h2 class="text-2xl font-bold">{{ port?.name }}</h2>
-            <div>Value: <span class="font-bold text-primary">{{ formatNumber(portValue || 0) }}</span></div>
-        </div>
-
-        <div class="flex flex-col text-xs font-bold">
-            <span class="text-gray-400">{{ port?.description }}</span>
-            <div class="flex justify-between mt-1">
-                <div>Cost: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
-                <div>Profit: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
-                    formatNumber(portProfit || 0) }} ({{ formatNumber(portProfitPercentage || 0) }}%)</span></div>
-            </div>
-        </div>
-    </header>
+    <PortHeader :port :portValue :portCost :portProfit :portProfitPercentage />
 
     <PortEmpty title="No Stocks" description="Add a stock to get started" v-if="stocks?.length === 0" />
     <template v-else>
-        <div class="flex justify-between items-center mb-2">
-            <div>Portfolio ratio: </div>
-            <div class="text-xs flex items-center gap-0.5">
-                <Icon name="lucide:pie-chart" />
-                {{ formatNumber(stocksRatio || 0) }} / 100%
-            </div>
-        </div>
+        <PortStockRatio :stocksRatio />
 
         <div class="space-y-2 mb-2">
             <div v-for="stock in stocks" :key="stock.id">

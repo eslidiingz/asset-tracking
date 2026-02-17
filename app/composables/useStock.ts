@@ -102,12 +102,16 @@ export const useStock = () => {
     }
 
     const resetForm = () => {
-        form.id = undefined;
-        form.port_id = undefined;
-        form.symbol = undefined;
-        form.amount = undefined;
-        form.cost = undefined;
-        form.ratio = undefined;
+        nextTick(() => {
+            Object.assign(form, {
+                id: undefined,
+                port_id: undefined,
+                symbol: undefined,
+                amount: undefined,
+                cost: undefined,
+                ratio: undefined
+            })
+        })
     }
 
     const findSymbol = (symbol: string) => stockStore.priceList.find(s => s.symbol === symbol)
