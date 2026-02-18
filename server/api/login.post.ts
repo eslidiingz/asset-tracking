@@ -38,26 +38,23 @@ export default defineEventHandler(async (event) => {
         username: user.username,
     }
 
-    // 1. สร้าง Access Token (อายุ 1 ชั่วโมง)
     const accessToken = jwt.sign(
         userCredential,
         process.env.JWT_ACCESS_SECRET!,
         { expiresIn: '1h' }
     );
 
-    // 2. สร้าง Refresh Token (อายุยาว เช่น 7 วัน)
     const refreshToken = jwt.sign(
         { id: user.id },
         process.env.JWT_REFRESH_SECRET!,
-        { expiresIn: '7d' }
+        { expiresIn: '24h' }
     );
 
-    // 3. เก็บ Refresh Token ใน HttpOnly Cookie
     setCookie(event, 'asset-tracking-refresh-token', refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7 // 7 วัน
+        maxAge: 60 * 60 * 24 // 24 ชั่วโมง
     });
 
     return {

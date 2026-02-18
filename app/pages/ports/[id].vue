@@ -61,6 +61,9 @@ const onDelete = (stock) => {
     }, `Stock has been deleted`)
 };
 
+onMounted(() => {
+    stockStore.fetchAssets()
+})
 
 </script>
 

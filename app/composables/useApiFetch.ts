@@ -9,16 +9,24 @@ export const useApiFetch: typeof useFetch = (url, options = {}) => {
             ...(authStore.accessToken ? { Authorization: `Bearer ${authStore.accessToken}` } : {})
         },
         async onResponseError({ response }) {
+            const nuxtApp = useNuxtApp()
             if (response.status === 401) {
                 if (!authStore.accessToken) {
                     await authStore.clearAuth()
-                    navigateTo('/login')
-                    return
+                    return nuxtApp.runWithContext(() => navigateTo('/login'))
                 }
                 const newToken = await authStore.refreshToken()
-                if (!newToken) {
+                if (newToken) {
+                    return $fetch(url, {
+                        ...options,
+                        headers: {
+                            ...options?.headers,
+                            Authorization: `Bearer ${newToken}`
+                        }
+                    })
+                } else {
                     await authStore.clearAuth()
-                    navigateTo('/login')
+                    return nuxtApp.runWithContext(() => navigateTo('/login'))
                 }
             }
         }

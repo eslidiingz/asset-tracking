@@ -15,7 +15,7 @@ export const getUserIdFromEvent = (event: any) => {
             const decoded = jwt.verify(token, accessSecret) as any
             return (decoded as { id: number }).id
         } catch (e) {
-            // Token ผิดปกติ หรือหมดอายุ
+            // console.error('Token ผิดปกติ หรือหมดอายุ')
         }
     }
 
@@ -26,7 +26,7 @@ export const getUserIdFromEvent = (event: any) => {
             const decoded = jwt.verify(tokenCookie, accessSecret) as any
             return (decoded as { id: number }).id
         } catch (e) {
-            // Cookie ผิดปกติ หรือหมดอายุ
+            // console.error('Cookie ผิดปกติ หรือหมดอายุ')
         }
     }
 

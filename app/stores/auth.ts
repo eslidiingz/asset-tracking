@@ -9,12 +9,12 @@ export const useAuthStore = defineStore('auth', () => {
     // ใช้ useCookie เพื่อให้ Server-side มองเห็นสถานะการ Login ด้วย
     // เพิ่ม maxAge เป็น 7 วัน เพื่อให้สามารถทำ Silent Refresh ได้โดยหน้าเว็บไม่เด้งออกไป Login ก่อน
     const accessToken = useCookie<string | null>('asset-tracking-access-token', {
-        maxAge: 60 * 60 * 24 * 7, // 7 วัน (ตามอายุ Refresh Token)
+        maxAge: 60 * 60 * 24, // 1 วัน (เพื่อให้ Cookie ไม่หายไปก่อนทำ Refresh)
         sameSite: 'lax'
     })
 
     const user = useCookie<User | null>('asset-tracking-user', {
-        maxAge: 60 * 60 * 24 * 7, // 7 วัน
+        maxAge: 60 * 60 * 24, // 1 วัน
         sameSite: 'lax'
     })
 
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     // ฟังก์ชันสำหรับ Refresh Token
     let refreshPromise: Promise<string | null> | null = null
-    const refreshToken = async (): Promise<string | null> => {
+    const refreshToken = async (url?: string): Promise<string | null> => {
         if (refreshPromise) return refreshPromise
 
         refreshPromise = (async () => {

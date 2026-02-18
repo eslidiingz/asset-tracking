@@ -3,6 +3,13 @@ definePageMeta({
     layout: 'auth',
 })
 
+interface LoginResponse {
+    success: boolean,
+    message: string,
+    access_token: string,
+    user: { id: number, username: string }
+}
+
 const username = ref('')
 const password = ref('')
 const isLoading = ref(false)
@@ -28,12 +35,7 @@ const handleLogin = async () => {
 
     isLoading.value = true
     try {
-        const response = await $fetch<{
-            success: boolean,
-            message: string,
-            access_token: string,
-            user: { id: number, username: string }
-        }>('/api/login', {
+        const response = await $fetch<LoginResponse>('/api/login', {
             method: 'POST',
             body: {
                 username: username.value,

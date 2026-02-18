@@ -11,6 +11,7 @@ export const useApi = () => {
             }
         },
         async onResponseError({ response, options, request }) {
+            const nuxtApp = useNuxtApp()
             if (response.status === 401) {
                 // อย่าทำ refresh ถ้ากำลังเรียก api/refresh หรือ login หรือ logout อยู่แล้ว
                 const url = request.toString()
@@ -23,8 +24,7 @@ export const useApi = () => {
                 // พยายาม Refresh เฉพาะเมื่อเรามี Token เดิมอยู่ (แปลว่าหมดอายุ)
                 if (!authStore.accessToken) {
                     await authStore.clearAuth()
-                    navigateTo('/login')
-                    return
+                    return nuxtApp.runWithContext(() => navigateTo('/login'))
                 }
 
                 // พยายาม Refresh Token
@@ -38,7 +38,7 @@ export const useApi = () => {
                 } else {
                     // ถ้า refresh ไม่สำเร็จ หรือ Refresh Token หมดอายุ
                     await authStore.clearAuth()
-                    navigateTo('/login')
+                    return nuxtApp.runWithContext(() => navigateTo('/login'))
                 }
             }
         }

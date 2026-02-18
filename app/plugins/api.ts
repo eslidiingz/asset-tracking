@@ -1,7 +1,7 @@
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
     const authStore = useAuthStore()
 
-    const api = $fetch.create({
+    const api: any = $fetch.create({
         onRequest({ options }) {
             if (authStore.accessToken) {
                 options.headers = {
@@ -24,14 +24,23 @@ export default defineNuxtPlugin(() => {
                 // ถ้าไม่มี Token เลย แปลว่ายังไม่ได้ Login จึงไม่ควรทำ Refresh
                 if (!authStore.accessToken) {
                     await authStore.clearAuth()
-                    navigateTo('/login')
-                    return
+                    return nuxtApp.runWithContext(() => navigateTo('/login'))
                 }
 
                 const newToken = await authStore.refreshToken()
-                if (!newToken) {
+                if (newToken) {
+                    reloadNuxtApp();
+                    // ปรับ Header ใหม่สำหรับ Request ที่จะ Retry
+                    options.headers = {
+                        ...options.headers,
+                        Authorization: `Bearer ${newToken}`
+                    } as any
+
+                    // ยิงซ้ำและคืนค่า Promise ตัวใหม่กลับไป
+                    return api(request, options)
+                } else {
                     await authStore.clearAuth()
-                    navigateTo('/login')
+                    return nuxtApp.runWithContext(() => navigateTo('/login'))
                 }
             }
         }

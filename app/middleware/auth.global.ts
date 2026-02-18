@@ -1,18 +1,15 @@
-import { useAuthStore } from '../stores/auth'
-
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
     const authStore = useAuthStore()
 
-    // เช็คสถานะการ Login (ตอนนี้ใช้ useCookie ใน Store แล้ว ทำให้ Server และ Client เห็นตรงกัน)
-    const isLoggedIn = authStore.isAuthenticated
+    // ไม่ต้องเช็คถ้าอยู่ในหน้า login หรือ auth paths
+    if (to.path === '/login') return
 
-    // 1. ถ้า Login แล้ว และกำลังจะไปหน้า Login ให้กลับไปหน้า index
-    if (isLoggedIn && to.path === '/login') {
-        return navigateTo('/')
-    }
-
-    // 2. ถ้ายังไม่ได้ Login และกำลังจะไปหน้าอื่นที่ไม่ใช่หน้า Login ให้ไปหน้า Login
-    if (!isLoggedIn && to.path !== '/login') {
-        return navigateTo('/login')
+    // ถ้าไม่มี Access Token แต่ผู้ใช้กำลังจะเข้าหน้าที่ต้องใช้ Auth
+    if (!authStore.accessToken) {
+        // ลองพยายาม refresh ดูก่อนว่ามี session ค้างใน HttpOnly cookie ไหม
+        const newToken = await authStore.refreshToken()
+        if (!newToken) {
+            return navigateTo('/login')
+        }
     }
 })
