@@ -8,10 +8,22 @@ const { user } = storeToRefs(authStore)
 const { fetchAssets } = useStockStore();
 await fetchAssets();
 
+// Composables
+const { requireConfirm } = useAppConfirm()
+
+// States
+const visible = ref<boolean>(false);
+
 // Methods
-const handleLogout = async () => {
-    await authStore.clearAuth()
-    router.push('/login')
+const onLogout = async () => {
+    requireConfirm({
+        message: 'Are you sure you want to logout?',
+        onAccept: async () => {
+            await authStore.clearAuth()
+            router.push('/login')
+        },
+        successDetail: 'Logged out successfully'
+    })
 }
 </script>
 
@@ -28,18 +40,39 @@ const handleLogout = async () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <div v-if="user" class="hidden sm:flex flex-col items-end">
-                    <span class="text-sm font-medium text-white">{{ user.username }}</span>
-                    <span class="text-xs text-gray-500 uppercase tracking-wider">Investor</span>
-                </div>
+                <Button v-if="user?.role === 'ADMIN'" severity="secondary" variant="text"
+                    class="!text-gray-400 hover:!text-white !p-2">
+                    <template #icon>
+                        <Icon name="lucide:menu" class="w-5 h-5" @click="visible = true" />
+                    </template>
+                </Button>
 
-                <Button @click="handleLogout" severity="secondary" variant="text"
+                <Button v-else @click="onLogout" severity="secondary" variant="text"
                     class="!text-gray-400 hover:!text-white !p-2">
                     <template #icon>
                         <Icon name="lucide:log-out" class="w-5 h-5" />
                     </template>
                 </Button>
             </div>
+
+            <Drawer v-if="user?.role === 'ADMIN'" v-model:visible="visible" header="Menu" position="right">
+                <ul class="list-none p-0 m-0 overflow-hidden">
+                    <li>
+                        <a v-ripple
+                            class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors">
+                            <i class="pi pi-users mr-2"></i>
+                            <span class="font-medium">Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a v-ripple @click="onLogout"
+                            class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-red-500 dark:hover:bg-surface-800 duration-150 transition-colors">
+                            <i class="pi pi-sign-out mr-2"></i>
+                            <span class="font-medium">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </Drawer>
         </div>
     </header>
 </template>

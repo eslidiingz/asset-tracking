@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
     const userCredential = {
         id: user.id,
         username: user.username,
+        role: user.role
     }
 
     const accessToken = jwt.sign(

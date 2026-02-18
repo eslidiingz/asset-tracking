@@ -81,7 +81,7 @@ const handleLogin = async () => {
         <div class="w-full max-w-sm">
             <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-gray-800">
                 <div class="text-center text-sm font-bold mb-6">
-                    Sign in for managing your portfolio
+                    Login for managing your portfolio
                 </div>
 
                 <form @submit.prevent="handleLogin" class="space-y-5">
@@ -110,7 +110,7 @@ const handleLogin = async () => {
                     </div>
 
                     <div class="pt-2">
-                        <Button type="submit" label="Sign In" :loading="isLoading"
+                        <Button type="submit" label="Login" :loading="isLoading"
                             class="w-full !bg-primary-600 hover:!bg-primary-500 !border-none !text-white !font-semibold !py-2.5 !rounded-lg shadow-lg shadow-primary-900/20">
                             <template #icon>
                                 <Icon name="lucide:log-in" class="w-5 h-5" />

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 interface User {
     id: number
     username: string
+    role: string
 }
 
 export const useAuthStore = defineStore('auth', () => {

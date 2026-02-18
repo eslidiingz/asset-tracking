@@ -6,6 +6,7 @@ export const usersTable = sqliteTable('users', {
     username: text().notNull(),
     password: text().notNull(),
     is_active: int().default(1),
+    role: text({ enum: ['USER', 'ADMIN'] }).default('USER'),
 })
 
 export const assetsTable = sqliteTable('assets', {
