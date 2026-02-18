@@ -32,33 +32,23 @@ const currentRatio = computed(() => {
             <Card class="card-port hover:border-primary/50 transition-colors">
                 <template #title>
                     <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-lg text-white group-hover:text-primary transition-colors">
-                            {{ port.name }}
-                        </h3>
+                        <div>
+                            <h3 class="font-bold text-lg text-white group-hover:text-primary transition-colors">
+                                {{ port.name }}
+                            </h3>
+                            <p class="text-sm text-gray-500 line-clamp-1 italic leading-snug">
+                                {{ port.description }}
+                            </p>
+                        </div>
 
                         <UiCurrentRatio class="text-sm" :value="currentRatio" :target="port.ratio || 0" />
-                        <!-- <div class="flex space-x-1 items-center">
-                            <Icon name="lucide:chart-pie" class="text-base"
-                                :class="{ 'text-red-400': currentRatio(port?.value || 0, asset?.value || 0) > (port.ratio || 0) }" />
-                            <span class="text-sm font-mono text-gray-300">
-                                <span
-                                    :class="{ 'text-red-400': currentRatio(port?.value || 0, asset?.value || 0) > (port.ratio || 0) }">
-                                    {{ formatNumber(currentRatio(port?.value || 0, asset?.value || 0), 2) }}
-                                </span> / {{ port.ratio || 0 }}%
-                            </span>
-                        </div> -->
                     </div>
-
-                </template>
-
-                <template #subtitle v-if="port.description">
-                    <p class="text-xs text-gray-600 line-clamp-1 mt-1">{{ port.description }}</p>
                 </template>
 
                 <template #content>
                     <div class="space-y-1 mt-2">
                         <div class="flex justify-between items-end text-xs">
-                            <div class="text-gray-500">Profit:</div>
+                            <div>Profit:</div>
                             <div class="text-right font-bold"
                                 :class="{ 'text-green-500': (port?.profitPercentage || 0) > 0, 'text-red-500': (port?.profitPercentage || 0) < 0 }">
                                 {{ formatNumber(port?.profitAmount || 0) }} ({{
@@ -66,12 +56,12 @@ const currentRatio = computed(() => {
                         </div>
 
                         <div class="flex justify-between items-end text-xs">
-                            <div class="text-gray-500">Cost:</div>
+                            <div>Cost:</div>
                             <div class="font-bold text-blue-400">{{ formatNumber(port?.cost || 0) }}</div>
                         </div>
 
                         <div class="flex justify-between items-end text-xs">
-                            <div class="text-gray-500">Value:</div>
+                            <div>Value:</div>
                             <div class="font-bold text-primary">{{ formatNumber(port?.value || 0) }}</div>
                         </div>
                     </div>
@@ -90,7 +80,7 @@ const currentRatio = computed(() => {
                                 <Icon name="lucide:trash-2" class="text-xl" />
                             </button>
                             <button @click.stop.prevent="emit('edit')"
-                                class="text-gray-500 hover:text-primary transition-colors flex items-center justify-center outline-none"
+                                class="text-gray-500 hover:text-yellow-400 transition-colors flex items-center justify-center outline-none"
                                 title="Edit Portfolio">
                                 <Icon name="lucide:edit" class="text-xl" />
                             </button>

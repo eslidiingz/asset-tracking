@@ -22,12 +22,17 @@ const onCardClick = (event: Event) => {
         @click="onCardClick">
         <Card class="card-port overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm">
             <template #title>
-                <div class="flex justify-between">
-                    <h3 class="font-bold text-lg text-gray-900 dark:text-gray-100 truncate">
-                        {{ asset.name }}
-                        <UiTag>{{ `${asset?.ports?.length} Port${(asset?.ports?.length || 0) !== 1 ? 's' : ''}` }}
-                        </UiTag>
-                    </h3>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold  text-lg text-gray-900 dark:text-gray-100 truncate">
+                            {{ asset.name }}
+                            <UiTag>{{ `${asset?.ports?.length} Port${(asset?.ports?.length || 0) !== 1 ? 's' : ''}` }}
+                            </UiTag>
+                        </h3>
+                        <p class="text-sm text-gray-500 line-clamp-1 italic leading-snug">
+                            {{ asset.description }}
+                        </p>
+                    </div>
                     <AssetCardActions @edit="emit('edit')" @delete="emit('delete')" class="asset-actions" />
                 </div>
             </template>
@@ -46,22 +51,11 @@ const onCardClick = (event: Event) => {
                             <div>Cost: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
                         </div>
                     </div>
-
-                    <div class="flex items-center gap-1 shrink-0">
-
-                        <!-- Action Molecule: Handles Edit/Delete operations -->
-
-                    </div>
                 </div>
             </template>
 
             <template #subtitle v-if="asset.description">
-                <div class="mt-2 flex justify-between items-end">
-                    <p class="text-sm text-gray-500 line-clamp-2 italic leading-snug pr-4">
-                        {{ asset.description }}
-                    </p>
-                    <Icon name="lucide:chevron-right" class="text-gray-300 shrink-0 mb-1" />
-                </div>
+
             </template>
         </Card>
     </div>
