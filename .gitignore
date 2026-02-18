@@ -24,3 +24,6 @@ logs
 !.env.example
 
 server/database/db.sqlite
+server/database/db.sqlite-journal
+server/database/db.sqlite-shm
+server/database/db.sqlite-wal
