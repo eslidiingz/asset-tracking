@@ -58,11 +58,18 @@ const onLogout = async () => {
             <Drawer v-if="user?.role === 'ADMIN'" v-model:visible="visible" header="Menu" position="right">
                 <ul class="list-none p-0 m-0 overflow-hidden">
                     <li>
-                        <a v-ripple
+                        <NuxtLink to="/" v-ripple @click="visible = false"
+                            class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors">
+                            <i class="pi pi-home mr-2"></i>
+                            <span class="font-medium">Home</span>
+                        </NuxtLink>
+                    </li>
+                    <li>
+                        <NuxtLink to="/users" v-ripple @click="visible = false"
                             class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors">
                             <i class="pi pi-users mr-2"></i>
                             <span class="font-medium">Users</span>
-                        </a>
+                        </NuxtLink>
                     </li>
                     <li>
                         <a v-ripple @click="onLogout"

@@ -7,27 +7,31 @@ export const getUserIdFromEvent = (event: any) => {
         return null
     }
 
-    // 1. ดึงจาก Header (Access Token)
     const authHeader = getHeader(event, 'Authorization')
-    if (authHeader?.startsWith('Bearer ')) {
-        const token = authHeader.split(' ')[1]
+    const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : getCookie(event, 'asset-tracking-access-token')
+
+    if (token) {
         try {
             const decoded = jwt.verify(token, accessSecret) as any
             return (decoded as { id: number }).id
-        } catch (e) {
-            // console.error('Token ผิดปกติ หรือหมดอายุ')
-        }
+        } catch (e) { }
     }
 
-    // 2. ดึงจาก Cookie
-    const tokenCookie = getCookie(event, 'asset-tracking-access-token')
-    if (tokenCookie) {
+    return null
+}
+
+export const getUserRoleFromEvent = (event: any) => {
+    const accessSecret = process.env.JWT_ACCESS_SECRET
+    if (!accessSecret) return null
+
+    const authHeader = getHeader(event, 'Authorization')
+    const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : getCookie(event, 'asset-tracking-access-token')
+
+    if (token) {
         try {
-            const decoded = jwt.verify(tokenCookie, accessSecret) as any
-            return (decoded as { id: number }).id
-        } catch (e) {
-            // console.error('Cookie ผิดปกติ หรือหมดอายุ')
-        }
+            const decoded = jwt.verify(token, accessSecret) as any
+            return (decoded as { role: string }).role
+        } catch (e) { }
     }
 
     return null
@@ -42,4 +46,15 @@ export const requireUserId = (event: any) => {
         })
     }
     return userId
+}
+
+export const requireUserRole = (event: any) => {
+    const role = getUserRoleFromEvent(event)
+    if (role !== 'ADMIN') {
+        throw createError({
+            statusCode: 403,
+            statusMessage: 'Forbidden: Admin access required'
+        })
+    }
+    return role
 }
