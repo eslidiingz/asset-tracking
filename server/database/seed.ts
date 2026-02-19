@@ -5,9 +5,17 @@ import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import path from 'path';
 
-const dbPath = path.resolve(process.cwd(), './server/database/db.sqlite');
+import dotenv from 'dotenv';
+dotenv.config(); // โหลดค่าจาก .env แน่นอน
+
+const dbUrl = process.env.TURSO_DATABASE_URL || `file:${path.resolve(process.cwd(), './server/database/db.sqlite')}`;
+const authToken = process.env.TURSO_AUTH_TOKEN;
+
+console.log('🔗 Connecting to:', dbUrl.split('@')[0]); // Log บอกใบ้พาธ (ไม่โชว์ token ทั้งหมดเพื่อความปลอดภัย)
+
 const client = createClient({
-    url: `file:${dbPath}`,
+    url: dbUrl,
+    authToken: authToken,
 });
 const db = drizzle(client, { schema });
 
