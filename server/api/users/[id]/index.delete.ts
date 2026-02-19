@@ -3,13 +3,7 @@ import { usersTable } from "~~/server/database/schema";
 
 export default defineEventHandler(async (event) => {
     // Check if user is Admin
-    const userRole = requireUserRole(event);
-    if (userRole !== 'ADMIN') {
-        throw createError({
-            statusCode: 403,
-            statusMessage: "Forbidden: Admin access required",
-        });
-    }
+    requireUserRole(event);
 
     const userId = Number(getRouterParam(event, 'id'))
     const userDeleted = useDrizzle().delete(usersTable)

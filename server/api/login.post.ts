@@ -1,5 +1,5 @@
 import { usersTable } from "../database/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -15,12 +15,19 @@ export default defineEventHandler(async (event) => {
     }
 
     const db = useDrizzle();
-    const user = db.select().from(usersTable).where(eq(usersTable.username, username)).get();
+    const user = db.select().from(usersTable)
+        .where(
+            and(
+                eq(usersTable.username, username),
+                eq(usersTable.is_active, 1)
+            )
+        )
+        .get();
 
     if (!user) {
         return {
             success: false,
-            message: "User not found"
+            message: "Invalid username or password"
         }
     }
 

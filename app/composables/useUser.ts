@@ -3,14 +3,15 @@ import type { User } from "~/interfaces/user.interface"
 export const useUser = () => {
     const { $api } = useNuxtApp();
 
-    const users = ref<User[]>([])
-    const isLoading = ref(false)
-    const form = reactive<Partial<User>>({
+    const users = useState<User[]>('users', () => [])
+    const isLoading = useState<boolean>('user-loading', () => false)
+    const isEditMode = useState<boolean>('user-edit-mode', () => false)
+    const form = useState<Partial<User>>('user-form', () => ({
         username: '',
         password: '',
         is_active: 1,
         role: 'USER'
-    })
+    }))
 
     const fetchUsers = async () => {
         isLoading.value = true
@@ -25,23 +26,23 @@ export const useUser = () => {
     }
 
     const setForm = (user: Partial<User>) => {
-        Object.assign(form, {
+        form.value = {
             id: user.id || undefined,
             username: user.username || '',
             password: '', // Clear password field for security/edit
             is_active: user.is_active ?? 1,
             role: user.role || 'USER'
-        })
+        }
     }
 
     const resetForm = () => {
-        Object.assign(form, {
+        form.value = {
             id: undefined,
             username: '',
             password: '',
             is_active: 1,
             role: 'USER'
-        })
+        }
     }
 
     const createUser = async (userData: Partial<User>) => {
@@ -54,6 +55,7 @@ export const useUser = () => {
             const newUser = (response as any).data as User
             if (newUser) {
                 users.value.push(newUser)
+                resetForm();
             }
             return response
         } catch (error) {
@@ -75,6 +77,7 @@ export const useUser = () => {
             const index = users.value.findIndex((u) => u.id === userData.id)
             if (index !== -1 && updatedUser) {
                 users.value[index] = updatedUser
+                resetForm();
             }
             return response
         } catch (error) {
@@ -104,6 +107,7 @@ export const useUser = () => {
         users,
         isLoading,
         form,
+        isEditMode,
 
         fetchUsers,
         setForm,

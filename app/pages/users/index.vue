@@ -3,34 +3,23 @@ import type { User } from '~/interfaces/user.interface'
 
 // --- Composables ---
 const $user = useUser()
-const { isLoading, users, fetchUsers, deleteUser } = $user
+const { users, fetchUsers, deleteUser } = $user
 await fetchUsers()
 
 const { requireDelete } = useAppConfirm()
 
 // --- State Management ---
 const isDialogVisible = ref(false)
-const searchQuery = ref('')
-const selectedUser = ref<Partial<User>>()
-const isSubmitting = ref(false)
-
-// --- Computed ---
-const filteredUsers = computed(() => {
-    if (!searchQuery.value) return users.value
-    const q = searchQuery.value.toLowerCase()
-    return users.value.filter(u => u.username.toLowerCase().includes(q))
-})
 
 // --- Handlers ---
 const openNew = () => {
     $user.resetForm()
-    selectedUser.value = { username: '', role: 'USER', is_active: 1 }
     isDialogVisible.value = true
 }
 
 const editUser = (user: User) => {
     $user.setForm(user)
-    selectedUser.value = { ...user }
+    $user.isEditMode.value = true
     isDialogVisible.value = true
 }
 
@@ -81,7 +70,7 @@ const onDeleteUser = async (user: User) => {
                             {{ user.role }}
                         </div>
 
-                        <div class="flex items-center justify-self-end gap-x-2">
+                        <div class="flex items-center justify-self-end gap-x-2" v-if="user.role !== 'ADMIN'">
                             <button @click.stop.prevent="editUser(user)"
                                 class="text-gray-500 hover:text-yellow-400 transition-colors flex items-center justify-center outline-none"
                                 title="Edit User">
@@ -100,8 +89,7 @@ const onDeleteUser = async (user: User) => {
     </div>
 
     <UiButtonFloat @click="openNew" />
-    <UserModalForm v-model:visible="isDialogVisible" :user="selectedUser" :loading="isSubmitting"
-        @update:users="onUpdateUsers" />
+    <UserModalForm v-model:visible="isDialogVisible" @update:users="onUpdateUsers" />
 </template>
 
 <style scoped>

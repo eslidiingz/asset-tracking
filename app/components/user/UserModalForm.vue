@@ -1,42 +1,49 @@
 <script setup lang="ts">
-import type { User } from '~/interfaces/user.interface'
-
 const props = defineProps<{
     visible: boolean
-    user?: Partial<User>
-    loading?: boolean
 }>()
 
 const emit = defineEmits(['update:visible', 'update:users'])
 
-// Composables
+// --- Composables ---
 const $user = useUser()
-const { form, isLoading, createUser, updateUser } = $user
+const toast = useToast()
+const { createUser, updateUser, form, isLoading } = $user
 
+// --- Computed ---
 const isVisible = computed({
     get: () => props.visible,
     set: (value) => emit('update:visible', value)
 })
 
+// --- Watchers ---
+watch(() => props.visible, (newVisible) => {
+    const onEditMode = $user.isEditMode.value === true
+    if (newVisible && !onEditMode) {
+        $user.resetForm()
+    }
+})
+
+// --- Handler ---
 const onCloseModal = () => {
     isVisible.value = false
 }
 
-const toast = useToast()
 
+// --- Methods ---
 const onSubmit = async () => {
     try {
-        if (form.id) {
-            await updateUser(form)
+        if (form.value.id) {
+            await updateUser(form.value)
         } else {
-            await createUser(form)
+            await createUser(form.value)
         }
         emit('update:users')
         onCloseModal()
         toast.add({
             severity: 'success',
             summary: 'Success',
-            detail: `User ${form.id ? 'updated' : 'created'} successfully`,
+            detail: `User ${form.value.id ? 'updated' : 'created'} successfully`,
             life: 3000
         })
     } catch (error: any) {
@@ -71,7 +78,7 @@ const onSubmit = async () => {
 
                 <div class="flex flex-col">
                     <InputText type="password" id="password" name="password" v-model="form.password"
-                        placeholder="Enter password" required />
+                        placeholder="Enter password" :required="!form.id" />
                 </div>
 
                 <div class="flex items-center">
