@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const db = useDrizzle();
-    const user = db.select().from(usersTable)
+    const user = await db.select().from(usersTable)
         .where(
             and(
                 eq(usersTable.username, username),
