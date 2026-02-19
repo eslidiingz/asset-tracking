@@ -22,7 +22,7 @@ const stockStore = useStockStore()
 const { assets } = storeToRefs(stockStore)
 
 // Computed
-const asset = computed(() => assets.value?.find(asset => asset.id === portData.value.asset_id))
+const asset = computed(() => assets.value?.find(asset => asset.id === portData.value?.asset_id))
 const port = computed(() => asset.value?.ports?.find(port => port.id === portId))
 const stocks = computed(() => port.value?.stocks)
 

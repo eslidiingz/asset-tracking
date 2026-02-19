@@ -20,6 +20,13 @@ const asset = computed(() => assets.value.find((asset) => asset.id === Number(as
 const ports = computed(() => asset.value?.ports)
 const portRatio = computed(() => ports.value?.reduce((acc, port) => acc + (port.ratio || 0), 0) || 0)
 
+// Safety Check: Redirect if asset not found (unauthorized or deleted)
+watchPostEffect(() => {
+    if (assets.value.length > 0 && !asset.value) {
+        navigateTo('/')
+    }
+})
+
 const onEditPort = (port: Port) => {
     editingPort.value = port;
     visible.value = true;

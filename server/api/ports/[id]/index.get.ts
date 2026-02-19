@@ -1,14 +1,34 @@
-import { portsTable } from "~~/server/database/schema";
-import { eq } from "drizzle-orm";
+import { assetsTable, portsTable } from "~~/server/database/schema";
+import { and, eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
     const userId = requireUserId(event);
     const portId = Number(getRouterParam(event, 'id'))
-    const port = useDrizzle().select().from(portsTable).where(eq(portsTable.id, portId)).get();
+
+    // Join with assets to verify ownership
+    const data = useDrizzle().select({
+        port: portsTable
+    })
+        .from(portsTable)
+        .innerJoin(assetsTable, eq(portsTable.asset_id, assetsTable.id))
+        .where(
+            and(
+                eq(portsTable.id, portId),
+                eq(assetsTable.user_id, userId)
+            )
+        )
+        .get();
+
+    if (!data) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: "Port not found or access denied",
+        })
+    }
 
     return {
         success: true,
         message: "Find port successfully",
-        data: port
+        data: data.port
     }
 })

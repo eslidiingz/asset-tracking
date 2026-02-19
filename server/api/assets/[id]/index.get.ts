@@ -1,12 +1,15 @@
 import { assetsTable } from "~~/server/database/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
-    requireUserId(event);
+    const userId = requireUserId(event);
 
     const assetId = Number(getRouterParam(event, 'id'));
     const asset = await useDrizzle().query.assetsTable.findFirst({
-        where: eq(assetsTable.id, assetId),
+        where: and(
+            eq(assetsTable.id, assetId),
+            eq(assetsTable.user_id, userId)
+        ),
         with: {
             ports: {
                 with: {
@@ -15,6 +18,13 @@ export default defineEventHandler(async (event) => {
             }
         }
     })
+
+    if (!asset) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: "Asset not found or access denied",
+        })
+    }
 
     return {
         success: true,

@@ -12,4 +12,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
             return navigateTo('/login')
         }
     }
+
+    // Role-based Protection
+    if (to.path.startsWith('/users')) {
+        if (authStore.user?.role !== 'ADMIN') {
+            return navigateTo('/')
+        }
+    }
 })
