@@ -30,6 +30,7 @@ async function seed() {
             await db.insert(schema.usersTable).values({
                 username: adminUsername,
                 password: "$2b$10$Xhicida0fJZwwc.yHOOAYOKECWd/IL4QEyzAcDBzIQMyuhjlNFprm",
+                role: "ADMIN",
                 is_active: 1
             });
 
