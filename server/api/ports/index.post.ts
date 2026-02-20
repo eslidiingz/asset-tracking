@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     const userId = requireUserId(event);
 
     // ตรวจสอบว่า Asset ที่อ้างถึงเป็นของผู้ใช้นี้จริงหรือไม่
-    const asset = useDrizzle().select()
+    const asset = await useDrizzle().select()
         .from(assetsTable)
         .where(and(
             eq(assetsTable.id, validated.data.asset_id),
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const port: typeof portsTable.$inferInsert = validated.data
-    const portCreated = useDrizzle().insert(portsTable).values(port).returning().get()
+    const portCreated = await useDrizzle().insert(portsTable).values(port).returning().get()
 
     return {
         success: true,

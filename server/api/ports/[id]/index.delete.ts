@@ -4,11 +4,11 @@ import { eq } from 'drizzle-orm';
 export default defineEventHandler(async (event) => {
     const portId = Number(getRouterParam(event, 'id'))
 
-    const portDeleted = useDrizzle().delete(portsTable)
+    const portDeleted = await useDrizzle().delete(portsTable)
         .where(eq(portsTable.id, portId))
         .returning()
         .get()
-    
+
     if (!portDeleted) {
         throw createError({
             status: 404,

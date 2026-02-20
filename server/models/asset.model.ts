@@ -9,13 +9,14 @@ export const assetSchema = z.object({
 })
 
 export default class Asset {
-    find(id: number) {
-        return useDrizzle().query.assetsTable.findFirst({
+    async find(id: number) {
+        return await useDrizzle().query.assetsTable.findFirst({
             where: eq(assetsTable.id, id)
         })
     }
 
-    exist(id: number) {
-        return useDrizzle().select().from(assetsTable).where(eq(assetsTable.id, id)).limit(1).get()
+    async exist(id: number) {
+        const result = await useDrizzle().select().from(assetsTable).where(eq(assetsTable.id, id)).limit(1).get()
+        return !!result
     }
 }

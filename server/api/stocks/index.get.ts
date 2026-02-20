@@ -3,8 +3,8 @@ import { eq } from "drizzle-orm"
 
 export default defineEventHandler(async (event) => {
     const { port_id: portId } = getQuery(event)
-    
-    const stocks = useDrizzle().select().from(stocksTable)
+
+    const stocks = await useDrizzle().select().from(stocksTable)
         .where(eq(stocksTable.port_id, Number(portId)))
         .all()
 

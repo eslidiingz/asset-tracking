@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     requireUserRole(event);
 
     const userId = Number(getRouterParam(event, 'id'))
-    const userDeleted = useDrizzle().delete(usersTable)
+    const userDeleted = await useDrizzle().delete(usersTable)
         .where(eq(usersTable.id, userId))
         .returning()
         .get()

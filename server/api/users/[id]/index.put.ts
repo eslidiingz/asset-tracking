@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        const userUpdated = useDrizzle().update(usersTable)
+        const userUpdated = await useDrizzle().update(usersTable)
             .set(updateData)
             .where(eq(usersTable.id, userId))
             .returning()

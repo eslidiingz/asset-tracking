@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     try {
-        const userCreated = useDrizzle().insert(usersTable).values({
+        const userCreated = await useDrizzle().insert(usersTable).values({
             ...userData,
             password: hashedPassword
         }).returning().get()

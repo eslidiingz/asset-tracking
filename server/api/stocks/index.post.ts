@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     const model = new StockModel;
 
     // เช็คว่าหุ้นตัวนี้มีอยู่ในพอร์ตนี้แล้วหรือยัง (เช็คคู่ port_id และ symbol)
-    const symbolExists = model.symbolExist(validated.data.port_id, validated.data.symbol)
+    const symbolExists = await model.symbolExist(validated.data.port_id, validated.data.symbol)
 
     if (symbolExists)
         throw createError({
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
         })
 
         // บันทึกข้อมูลลง Database
-        const stockCreated = model.create(stock);
+        const stockCreated = await model.create(stock);
 
         return {
             success: true,

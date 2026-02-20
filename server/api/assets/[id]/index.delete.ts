@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const assetDeleted = useDrizzle().delete(assetsTable).where(eq(assetsTable.id, assetId)).returning().get();
+    const assetDeleted = await useDrizzle().delete(assetsTable).where(eq(assetsTable.id, assetId)).returning().get();
 
     if (!assetDeleted) {
         throw createError({

@@ -3,7 +3,7 @@ import { stocksTable } from "~~/server/database/schema";
 
 export default defineEventHandler(async (event) => {
   const stockId = Number(getRouterParam(event, "id"));
-  const stock = useDrizzle().select().from(stocksTable).where(eq(stocksTable.id, stockId)).get();
+  const stock = await useDrizzle().select().from(stocksTable).where(eq(stocksTable.id, stockId)).get();
 
   if (!stock) {
     throw createError({
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const result = useDrizzle()
+  const result = await useDrizzle()
     .delete(stocksTable)
     .where(eq(stocksTable.id, stockId))
     .run();

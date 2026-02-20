@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
     const model = new StockModel;
     const stockId = Number(getRouterParam(event, 'id'));
-    const stockUpdated = model.update(stockId, validated.data)
+    const stockUpdated = await model.update(stockId, validated.data)
 
     return {
         success: true,

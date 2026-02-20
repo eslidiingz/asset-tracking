@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const id = Number(getRouterParam(event, 'id'))
 
     const model = new Asset()
-    const exist = model.exist(id)
+    const exist = await model.exist(id)
 
     if (!exist) {
         throw createError({
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
 
     const asset: typeof assetsTable.$inferInsert = validated.data
 
-    const assetUpdated = useDrizzle().update(assetsTable)
+    const assetUpdated = await useDrizzle().update(assetsTable)
         .set({
             ...asset,
             user_id: requireUserId(event)

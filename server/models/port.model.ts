@@ -3,7 +3,7 @@ import { assetsTable, portsTable } from "../database/schema"
 
 export default class PortModel {
     get = async (userId: number) => {
-        return useDrizzle().query.portsTable.findMany({
+        return await useDrizzle().query.portsTable.findMany({
             orderBy: (portsTable, { desc }) => [desc(portsTable.ratio)],
             with: {
                 asset: {

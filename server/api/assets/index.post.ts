@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
         user_id: userId
     }
 
-    const assetCreated = useDrizzle().insert(assetsTable).values(asset).returning().get()
+    const assetCreated = await useDrizzle().insert(assetsTable).values(asset).returning().get()
 
     return {
         success: true,

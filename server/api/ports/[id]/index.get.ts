@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const portId = Number(getRouterParam(event, 'id'))
 
     // Join with assets to verify ownership
-    const data = useDrizzle().select({
+    const data = await useDrizzle().select({
         port: portsTable
     })
         .from(portsTable)

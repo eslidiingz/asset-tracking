@@ -26,12 +26,12 @@ export default defineEventHandler(async (event) => {
     // Filter out fields that shouldn't be updated or are derived
     const { id, stocks, cost, profitAmount, profitPercentage, value, ...portUpdate } = validated.data
 
-    const portUpdated = useDrizzle().update(portsTable)
+    const portUpdated = await useDrizzle().update(portsTable)
         .set(portUpdate)
         .where(eq(portsTable.id, portId))
         .returning()
         .get()
-    
+
     return {
         success: true,
         message: 'Port updated successfully',
