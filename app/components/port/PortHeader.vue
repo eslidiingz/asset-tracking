@@ -11,6 +11,12 @@ const props = defineProps<{
 }>();
 
 const stocksCount = computed(() => props.port?.stocks?.length || 0)
+const classProfit = computed(() => {
+    const val = Number(props.portProfit);
+    if (val > 0) return 'text-green-400 font-bold'
+    if (val < 0) return 'text-red-400 font-bold'
+    return 'text-gray-400'
+})
 </script>
 
 <template>
@@ -25,18 +31,18 @@ const stocksCount = computed(() => props.port?.stocks?.length || 0)
 
         <div class="flex justify-between text-sm border-y border-gray-700 py-2">
             <div>
-                <div>มูลค่า: <span class="text-primary">{{ formatNumber(portValue || 0) }}</span></div>
+                <div>มูลค่า: <span class="text-primary font-bold">{{ formatNumber(portValue || 0) }}</span></div>
                 <div class="flex items-center gap-0.5">
                     <Icon name="lucide:pie-chart" />
                     {{ formatNumber(stocksRatio || 0) }} / 100%
                 </div>
             </div>
 
-            <div>
-                <div>กำไร: <span :class="{ 'text-green-500': portProfit > 0, 'text-red-500': portProfit < 0 }">{{
-                    formatNumber(portProfit || 0) }} ({{ formatNumber(portProfitPercentage || 0) }}%)</span>
+            <div class="text-right">
+                <div>กำไร: <span :class="classProfit">{{ formatNumber(portProfit || 0) }} ({{
+                    formatNumber(portProfitPercentage || 0) }}%)</span>
                 </div>
-                <div>ต้นทุน: <span class="text-blue-400">{{ formatNumber(portCost || 0) }}</span></div>
+                <div>ต้นทุน: <span class="text-blue-400 font-bold">{{ formatNumber(portCost || 0) }}</span></div>
             </div>
 
         </div>

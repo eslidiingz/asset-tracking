@@ -41,7 +41,8 @@ const onCardClick = (event: Event) => {
                 <div class="flex justify-between items-center gap-2">
                     <div class="flex-1 min-w-0 text-sm">
                         <div class="flex justify-between">
-                            <div>มูลค่า: <span class="text-primary">{{ formatNumber(asset?.value) }}</span></div>
+                            <div>มูลค่า: <span class="text-primary font-bold">{{ formatNumber(asset?.value) }}</span>
+                            </div>
                             <UiCurrentRatio :value="asset.ratio" :target="100" />
                         </div>
 

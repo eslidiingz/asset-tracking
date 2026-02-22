@@ -44,14 +44,14 @@ const onSubmit = async () => {
     }
 
     if (response?.success) {
-        toast.add({ severity: 'success', summary: 'Success', detail: `${isEditMode.value ? 'Stock has been updated' : 'Stock has been created'}`, life: 3000 });
+        toast.add({ severity: 'success', summary: 'สำเร็จ', detail: `${isEditMode.value ? 'แก้ไขหุ้นสำเร็จ' : 'เพิ่มหุ้นสำเร็จ'}`, life: 3000 });
         await stockStore.fetchAssets()
         emit('close');
     } else {
         toast.add({
             severity: 'error',
             summary: 'Error',
-            detail: response?.statusMessage || response?.message || 'Failed to save stock',
+            detail: response?.statusMessage || response?.message || 'ไม่สามารถบันทึกหุ้นได้',
             life: 5000
         });
     }
