@@ -28,8 +28,11 @@ const header = computed(() => `${isEditMode.value ? 'แก้ไข' : 'เพ�
 const onSubmit = async () => {
     let payload = {
         ...form,
-        port_id: Number(props.portId)
-    }
+        port_id: Number(props.portId),
+        amount: Number(form.amount || 0),
+        cost: Number(form.cost || 0),
+        ratio: Number(form.ratio || 0)
+    } as any
 
     let response;
 
@@ -54,9 +57,16 @@ const onSubmit = async () => {
     }
 }
 
-const onRatioInput = () => {
-    if (form.ratio && form.ratio > 100) form.ratio = 100
-    if (form.ratio && form.ratio < 0) form.ratio = 0
+const onNumericInput = (event: any, field: 'amount' | 'cost' | 'ratio', maxFractionDigits: number = 8) => {
+    let value = handleNumericInput(event.target.value, maxFractionDigits);
+
+    // Range validation for ratio
+    if (field === 'ratio') {
+        const num = parseFloat(value);
+        if (num > 100) value = "100";
+    }
+
+    (form as any)[field] = value;
 }
 </script>
 
@@ -68,15 +78,19 @@ const onRatioInput = () => {
                 <InputText id="symbol" name="symbol" type="text" placeholder="ตัวอย่าง: NVDA" required
                     v-model="form.symbol" @input="form.symbol = form.symbol?.toUpperCase()" class="w-full" autofocus />
 
-                <InputNumber id="amount" name="amount" placeholder="จำนวนหุ้นที่มี" :minFractionDigits="0"
-                    :maxFractionDigits="8" required v-model="form.amount" class="w-full" />
+                <InputText id="amount" name="amount" placeholder="จำนวนหุ้นที่มี" inputmode="decimal" required
+                    v-model="form.amount" @input="onNumericInput($event, 'amount', 8)" class="w-full" />
 
-                <InputNumber id="cost" name="cost" placeholder="ราคาต้นทุนเฉลี่ย" :minFractionDigits="0"
-                    :maxFractionDigits="8" mode="decimal" required v-model="form.cost" class="w-full" />
+                <InputText id="cost" name="cost" placeholder="ราคาต้นทุนเฉลี่ย" inputmode="decimal" required
+                    v-model="form.cost" @input="onNumericInput($event, 'cost', 8)" class="w-full" />
 
-                <InputNumber id="ratio" name="ratio" placeholder="สัดส่วนหุ้นเป้าหมาย" suffix="%" :min="0" :max="100"
-                    :minFractionDigits="0" :maxFractionDigits="2" mode="decimal" v-model="form.ratio"
-                    @input="onRatioInput" class="w-full" />
+                <div class="flex flex-col gap-1 w-full">
+                    <InputGroup>
+                        <InputText id="ratio" name="ratio" placeholder="สัดส่วนหุ้นเป้าหมาย" inputmode="decimal"
+                            v-model="form.ratio" @input="onNumericInput($event, 'ratio', 2)" class="w-full" />
+                        <InputGroupAddon>%</InputGroupAddon>
+                    </InputGroup>
+                </div>
                 <small class="text-xs text-gray-500">สัดส่วนหุ้นคงเหลือ: {{ remainingRatio }}%</small>
 
                 <div class="flex flex-col sm:flex-row justify-end gap-3 mt-4">
@@ -91,3 +105,11 @@ const onRatioInput = () => {
         </Dialog>
     </div>
 </template>
+
+<style scoped>
+:deep(.p-inputtext),
+:deep(.p-inputnumber-input) {
+    font-size: 1rem;
+    /* Prevent zoom on iOS */
+}
+</style>

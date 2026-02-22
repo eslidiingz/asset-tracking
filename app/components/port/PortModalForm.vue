@@ -33,11 +33,25 @@ const onCloseModal = () => {
     resetForm()
 }
 
+const onNumericInput = (event: any, field: 'ratio', maxFractionDigits: number = 8) => {
+    let value = handleNumericInput(event.target.value, maxFractionDigits);
+
+    // Range validation for ratio
+    if (field === 'ratio') {
+        const num = parseFloat(value);
+        if (num > 100) value = "100";
+    }
+
+    (form as any)[field] = value;
+}
+
 const onSubmit = async () => {
     if (props.port?.id) {
         form.asset_id = Number(props.assetId)
+        form.ratio = Number(form.ratio || 0)
         await updatePort(props.port.id)
     } else {
+        form.ratio = Number(form.ratio || 0)
         await createPort(props.assetId)
     }
     emit('update:ports')
@@ -62,12 +76,14 @@ const onSubmit = async () => {
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <InputNumber v-model="form.ratio" id="ratio" name="ratio" placeholder="สัดส่วนเป้าหมาย %" suffix="%"
-                        :min="0" :max="100" :minFractionDigits="0" :maxFractionDigits="2" mode="decimal"
-                        class="w-full h-12" />
+                    <InputGroup>
+                        <InputText v-model="form.ratio" id="ratio" name="ratio" placeholder="สัดส่วนเป้าหมาย %"
+                            inputmode="decimal" @input="onNumericInput($event, 'ratio', 2)" class="w-full h-12" />
+                        <InputGroupAddon>%</InputGroupAddon>
+                    </InputGroup>
                     <div class="flex justify-between items-center px-1">
                         <small class="text-xs text-gray-500">สัดส่วนพอร์ตที่เหลือ: {{ (100 - remainingRatio).toFixed(2)
-                            }}%</small>
+                        }}%</small>
                     </div>
                 </div>
             </div>
