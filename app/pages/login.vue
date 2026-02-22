@@ -38,8 +38,8 @@ const handleLogin = async () => {
         const response = await $fetch<LoginResponse>('/api/login', {
             method: 'POST',
             body: {
-                username: username.value,
-                password: password.value
+                username: username.value.toLowerCase().trim(),
+                password: password.value.trim()
             }
         })
 
