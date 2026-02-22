@@ -9,9 +9,10 @@ const props = defineProps({
 
 <template>
     <header class="flex justify-between items-center border-b border-gray-700 pb-2 mb-2">
-        <h2 class="text-2xl font-bold">My Assets</h2>
+        <h2 class="text-2xl font-bold">สินทรัพย์ของฉัน</h2>
+
         <div>
-            <span>Value: </span>
+            <span>มูลค่า: </span>
             <span class="font-bold text-primary">
                 {{ formatNumber(value) }}
             </span>

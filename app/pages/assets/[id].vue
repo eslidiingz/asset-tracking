@@ -62,7 +62,7 @@ const onCloseModal = () => {
 
     <template v-else>
         <div class="flex justify-between items-center mb-1">
-            <div>Port target ratio: </div>
+            <div>สัดส่วนสินทรัพย์: </div>
             <div class="text-xs">{{ formatNumber(portRatio) }}/100%</div>
         </div>
 

@@ -48,7 +48,7 @@ const currentRatio = computed(() => {
                 <template #content>
                     <div class="space-y-1 mt-2">
                         <div class="flex justify-between items-end text-xs">
-                            <div>Profit:</div>
+                            <div>กำไร:</div>
                             <div class="text-right font-bold"
                                 :class="{ 'text-green-500': (port?.profitPercentage || 0) > 0, 'text-red-500': (port?.profitPercentage || 0) < 0 }">
                                 {{ formatNumber(port?.profitAmount || 0) }} ({{
@@ -56,12 +56,12 @@ const currentRatio = computed(() => {
                         </div>
 
                         <div class="flex justify-between items-end text-xs">
-                            <div>Cost:</div>
+                            <div>ต้นทุน:</div>
                             <div class="font-bold text-blue-400">{{ formatNumber(port?.cost || 0) }}</div>
                         </div>
 
                         <div class="flex justify-between items-end text-xs">
-                            <div>Value:</div>
+                            <div>มูลค่า:</div>
                             <div class="font-bold text-primary">{{ formatNumber(port?.value || 0) }}</div>
                         </div>
                     </div>

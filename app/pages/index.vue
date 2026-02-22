@@ -63,7 +63,7 @@ const onUpdateAssets = async () => {
 
     <template v-else>
         <div class="flex justify-between items-center mb-1">
-            <div>Assets ratio: </div>
+            <div>สัดส่วนสินทรัพย์: </div>
             <div class="text-xs">{{ formatNumber(assetsRatio) }}/100%</div>
         </div>
 

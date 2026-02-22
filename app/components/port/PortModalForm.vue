@@ -46,36 +46,38 @@ const onSubmit = async () => {
 </script>
 
 <template>
-    <Dialog v-model:visible="visible" modal :header="port ? 'Edit Port' : 'Add Port'"
+    <Dialog v-model:visible="visible" modal :header="port ? 'แก้ไขพอร์ต' : 'เพิ่มพอร์ต'"
         class="w-full max-w-lg mx-2 md:mx-0" :breakpoints="{ '960px': '75vw', '641px': '95vw' }" @hide="onCloseModal">
         <Form @submit="onSubmit" class="mt-2">
             <div class="space-y-2 mb-6">
                 <div class="flex flex-col gap-1.5">
-                    <InputText id="name" name="name" type="text" placeholder="e.g. Technology, Dividend, Crypto"
-                        required v-model="form.name" class="w-full h-12" autofocus />
+                    <InputText id="name" name="name" type="text"
+                        placeholder="ตัวอย่าง: หุ้นเติบโต, หุ้นเสี่ยงสูง, หุ้นปันผล" required v-model="form.name"
+                        class="w-full h-12" autofocus />
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <InputText id="description" name="description" placeholder="Description (optional)"
+                    <InputText id="description" name="description" placeholder="รายละเอียด (ไม่จำเป็น)"
                         v-model="form.description" class="w-full h-12" />
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <InputNumber v-model="form.ratio" id="ratio" name="ratio" placeholder="Ratio %" suffix="%" :min="0"
-                        :max="100" :minFractionDigits="0" :maxFractionDigits="2" mode="decimal" class="w-full h-12" />
+                    <InputNumber v-model="form.ratio" id="ratio" name="ratio" placeholder="สัดส่วนเป้าหมาย %" suffix="%"
+                        :min="0" :max="100" :minFractionDigits="0" :maxFractionDigits="2" mode="decimal"
+                        class="w-full h-12" />
                     <div class="flex justify-between items-center px-1">
-                        <small class="text-xs text-gray-500">Remaining to allocate: {{ (100 - remainingRatio).toFixed(2)
-                        }}%</small>
+                        <small class="text-xs text-gray-500">สัดส่วนพอร์ตที่เหลือ: {{ (100 - remainingRatio).toFixed(2)
+                            }}%</small>
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row justify-end gap-3 mt-4">
-                <Button type="button" label="Cancel" severity="secondary" text @click="onCloseModal"
+                <Button type="button" label="ยกเลิก" severity="secondary" text @click="onCloseModal"
                     class="order-2 sm:order-1 h-12 sm:h-auto" />
                 <Button type="submit" :loading="isLoading" class="order-1 sm:order-2 h-12 px-8">
                     <Icon name="lucide:save" />
-                    <span>{{ port ? 'Update Changes' : 'Create Port' }}</span>
+                    <span>{{ port ? 'แก้ไขพอร์ต' : 'เพิ่มพอร์ต' }}</span>
                 </Button>
             </div>
         </Form>

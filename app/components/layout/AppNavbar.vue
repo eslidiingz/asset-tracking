@@ -34,16 +34,19 @@ const onLogout = async () => {
                 <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                     <Icon name="lucide:trending-up" class="text-white w-5 h-5" />
                 </div>
-                <h1 class="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    Asset Tracking
-                </h1>
+                <NuxtLink to="/"
+                    class="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                        Asset Tracking
+                    </h1>
+                </NuxtLink>
             </div>
 
             <div class="flex items-center gap-4">
                 <Button v-if="user?.role === 'ADMIN'" severity="secondary" variant="text"
-                    class="!text-gray-400 hover:!text-white !p-2">
+                    class="!text-gray-400 hover:!text-white !p-2" @click="visible = true">
                     <template #icon>
-                        <Icon name="lucide:menu" class="w-5 h-5" @click="visible = true" />
+                        <Icon name="lucide:menu" class="w-5 h-5" />
                     </template>
                 </Button>
 

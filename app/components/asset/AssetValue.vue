@@ -5,5 +5,5 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div>Value: <span class="font-bold text-primary">{{ formatNumber(props.value) }}</span></div>
+    <div>มูลค่า: <span class="font-bold text-primary">{{ formatNumber(props.value) }}</span></div>
 </template>

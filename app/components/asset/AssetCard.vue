@@ -41,21 +41,17 @@ const onCardClick = (event: Event) => {
                 <div class="flex justify-between items-center gap-2">
                     <div class="flex-1 min-w-0 text-sm">
                         <div class="flex justify-between">
-                            <div>Value: <span class="text-primary">{{ formatNumber(asset?.value) }}</span></div>
+                            <div>มูลค่า: <span class="text-primary">{{ formatNumber(asset?.value) }}</span></div>
                             <UiCurrentRatio :value="asset.ratio" :target="100" />
                         </div>
 
                         <div class="flex justify-between">
-                            <div>Profit: <span class="text-green-400">{{ formatNumber(asset?.profitAmount) }} ({{
+                            <div>กำไร: <span class="text-green-400">{{ formatNumber(asset?.profitAmount) }} ({{
                                 formatNumber(asset?.profitPercentage) }}%)</span></div>
-                            <div>Cost: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
+                            <div>ต้นทุน: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
                         </div>
                     </div>
                 </div>
-            </template>
-
-            <template #subtitle v-if="asset.description">
-
             </template>
         </Card>
     </div>
