@@ -61,7 +61,7 @@ const onSubmit = async () => {
                         class="w-full h-12" />
                     <div class="flex justify-between items-center px-1">
                         <small class="text-xs text-gray-500">สัดส่วนคงเหลือ: {{ (100 - remainingRatio).toFixed(2)
-                        }}%</small>
+                            }}%</small>
                     </div>
                 </div>
             </div>

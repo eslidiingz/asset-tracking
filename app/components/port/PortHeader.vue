@@ -15,7 +15,7 @@ const stocksCount = computed(() => props.port?.stocks?.length || 0)
 
 <template>
     <header class="mb-2">
-        <UiButtonBack :to="`/assets/${props.port?.asset_id}`" label="Back to Ports" />
+        <UiButtonBack :to="`/assets/${props.port?.asset_id}`" label="กลับไปหน้าพอร์ต" />
 
         <h2 class="text-2xl font-bold mb-2">{{ props.port?.name }}
             <UiTag class="mx-1">{{ stocksCount }} Stock{{ stocksCount === 1 ? '' : 's' }}</UiTag>

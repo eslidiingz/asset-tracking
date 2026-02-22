@@ -26,8 +26,8 @@ const handleLogin = async () => {
     if (usernameError.value || passwordError.value) {
         toast.add({
             severity: 'error',
-            summary: 'Validation Error',
-            detail: 'Please enter username and password',
+            summary: 'ข้อมูลไม่ถูกต้อง',
+            detail: 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน',
             life: 3000
         })
         return
@@ -50,7 +50,7 @@ const handleLogin = async () => {
 
             toast.add({
                 severity: 'success',
-                summary: 'Success',
+                summary: 'สำเร็จ',
                 detail: response.message,
                 life: 3000
             })
@@ -58,7 +58,7 @@ const handleLogin = async () => {
         } else {
             toast.add({
                 severity: 'error',
-                summary: 'Login Failed',
+                summary: 'เข้าสู่ระบบไม่สำเร็จ',
                 detail: response.message,
                 life: 3000
             })
@@ -66,8 +66,8 @@ const handleLogin = async () => {
     } catch (error: any) {
         toast.add({
             severity: 'error',
-            summary: 'Error',
-            detail: error.statusMessage || 'An unexpected error occurred',
+            summary: 'เกิดข้อผิดพลาด',
+            detail: error.statusMessage || 'เกิดข้อผิดพลาด',
             life: 3000
         })
     } finally {
@@ -81,7 +81,7 @@ const handleLogin = async () => {
         <div class="w-full max-w-sm">
             <div class="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-gray-800">
                 <div class="text-center text-sm font-bold mb-6">
-                    Login for managing your portfolio
+                    เข้าสู่ระบบเพื่อจัดการพอร์ตของคุณ
                 </div>
 
                 <form @submit.prevent="handleLogin" class="space-y-5">
@@ -92,7 +92,7 @@ const handleLogin = async () => {
                             </span>
                             <InputText id="username" v-model="username" :invalid="usernameError"
                                 class="w-full pl-10 !bg-gray-800/50 !border-gray-700/50 hover:!border-gray-600 focus:!border-primary-500/50 !text-sm !text-white !rounded-lg !py-2.5 transition-colors"
-                                placeholder="Enter username" style="padding-left: 2.5rem !important;" />
+                                placeholder="กรอกชื่อผู้ใช้" style="padding-left: 2.5rem !important;" />
                         </div>
                     </div>
 
@@ -105,12 +105,12 @@ const handleLogin = async () => {
                                 :invalid="passwordError"
                                 :inputClass="'w-full pl-10 !bg-gray-800/50 !border-gray-700/50 hover:!border-gray-600 focus:!border-primary-500/50 !text-sm !text-white !rounded-lg !py-2.5 transition-colors'"
                                 style="padding-left: 0;" :inputStyle="{ 'padding-left': '2.5rem !important' }"
-                                placeholder="Enter password" />
+                                placeholder="กรอกรหัสผ่าน" />
                         </div>
                     </div>
 
                     <div class="pt-2">
-                        <Button type="submit" label="Login" :loading="isLoading"
+                        <Button type="submit" label="เข้าสู่ระบบ" :loading="isLoading"
                             class="w-full !bg-primary-600 hover:!bg-primary-500 !border-none !text-white !font-semibold !py-2.5 !rounded-lg shadow-lg shadow-primary-900/20">
                             <template #icon>
                                 <Icon name="lucide:log-in" class="w-5 h-5" />

@@ -17,12 +17,12 @@ const visible = ref<boolean>(false);
 // Methods
 const onLogout = async () => {
     requireConfirm({
-        message: 'Are you sure you want to logout?',
+        message: 'คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ',
         onAccept: async () => {
             await authStore.clearAuth()
             router.push('/login')
         },
-        successDetail: 'Logged out successfully'
+        successDetail: 'ออกจากระบบสำเร็จ'
     })
 }
 </script>
@@ -58,27 +58,27 @@ const onLogout = async () => {
                 </Button>
             </div>
 
-            <Drawer v-if="user?.role === 'ADMIN'" v-model:visible="visible" header="Menu" position="right">
+            <Drawer v-if="user?.role === 'ADMIN'" v-model:visible="visible" header="เมนูผู้ดูแลระบบ" position="right">
                 <ul class="list-none p-0 m-0 overflow-hidden">
                     <li>
                         <NuxtLink to="/" v-ripple @click="visible = false"
                             class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors">
                             <i class="pi pi-home mr-2"></i>
-                            <span class="font-medium">Home</span>
+                            <span class="font-medium">หน้าหลัก</span>
                         </NuxtLink>
                     </li>
                     <li>
                         <NuxtLink to="/users" v-ripple @click="visible = false"
                             class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-surface-0 dark:hover:bg-surface-800 duration-150 transition-colors">
                             <i class="pi pi-users mr-2"></i>
-                            <span class="font-medium">Users</span>
+                            <span class="font-medium">ผู้ใช้</span>
                         </NuxtLink>
                     </li>
                     <li>
                         <a v-ripple @click="onLogout"
                             class="flex items-center cursor-pointer p-4 rounded hover:bg-surface-100 dark:text-red-500 dark:hover:bg-surface-800 duration-150 transition-colors">
                             <i class="pi pi-sign-out mr-2"></i>
-                            <span class="font-medium">Logout</span>
+                            <span class="font-medium">ออกจากระบบ</span>
                         </a>
                     </li>
                 </ul>

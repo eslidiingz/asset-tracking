@@ -41,7 +41,7 @@ const onDeleteAsset = async (asset: Asset) => {
         }
 
         return result
-    }, 'Asset has been deleted')
+    }, 'ลบสินทรัพย์เรียบร้อยแล้ว')
 }
 
 const onCloseModal = () => {

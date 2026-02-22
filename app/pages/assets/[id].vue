@@ -42,7 +42,7 @@ const onDeletePort = async (port: Port) => {
             stockStore.fetchAssets();
         }
         return result
-    }, 'Portfolio has been deleted')
+    }, 'ลบพอร์ตเรียบร้อยแล้ว')
 }
 
 const onUpdatePorts = async () => {
@@ -58,7 +58,7 @@ const onCloseModal = () => {
 <template>
     <AssetHeader v-if="asset" :asset="asset" @add-port="visible = true" />
 
-    <PortEmpty v-if="ports?.length === 0" title="No Sub Portfolios" description="Add a sub portfolio to get started" />
+    <PortEmpty v-if="ports?.length === 0" title="ยังไม่มีพอร์ต" description="เพิ่มพอร์ตเพื่อเริ่มต้น" />
 
     <template v-else>
         <div class="flex justify-between items-center mb-1">

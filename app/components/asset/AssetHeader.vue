@@ -13,7 +13,7 @@ const classProfit = computed(() => {
 
 <template>
     <header class="border-b border-gray-600 pb-2 mb-2">
-        <UiButtonBack to="/" label="Back to Assets" />
+        <UiButtonBack to="/" label="กลับไปหน้าสินทรัพย์" />
 
         <div class="flex justify-between items-end" v-if="asset">
             <h2 class="text-2xl font-bold">

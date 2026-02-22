@@ -2,11 +2,11 @@
 defineProps({
     title: {
         type: String,
-        default: 'No data'
+        default: 'ยังไม่มีพอร์ต'
     },
     description: {
         type: String,
-        default: 'Add your first portfolio to get started'
+        default: 'เพิ่มพอร์ตเพื่อเริ่มต้น'
     }
 })
 </script>

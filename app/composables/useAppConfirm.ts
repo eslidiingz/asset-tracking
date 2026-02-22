@@ -14,16 +14,16 @@ export const useAppConfirm = () => {
         successDetail?: string;
     }) => {
         confirm.require({
-            message: options.message || 'Are you sure you want to proceed?',
-            header: options.header || 'Confirmation',
+            message: options.message || 'คุณแน่ใจหรือไม่ว่าต้องการดำเนินการต่อ',
+            header: options.header || 'ยืนยัน',
             icon: options.icon || 'pi pi-exclamation-triangle',
             rejectProps: {
-                label: options.rejectLabel || 'Cancel',
+                label: options.rejectLabel || 'ยกเลิก',
                 severity: 'secondary',
                 outlined: true
             },
             acceptProps: {
-                label: options.acceptLabel || 'Confirm',
+                label: options.acceptLabel || 'ยืนยัน',
                 severity: (options.acceptSeverity as any) || 'primary'
             },
             accept: async () => {
@@ -38,7 +38,7 @@ export const useAppConfirm = () => {
                         if (options.successDetail) {
                             toast.add({
                                 severity: 'success',
-                                summary: options.successSummary || 'Success',
+                                summary: options.successSummary || 'สำเร็จ',
                                 detail: options.successDetail,
                                 life: 3000
                             });
@@ -46,16 +46,16 @@ export const useAppConfirm = () => {
                     } else {
                         toast.add({
                             severity: 'error',
-                            summary: 'Error',
-                            detail: result?.message || result?.statusMessage || 'Action failed',
+                            summary: 'เกิดข้อผิดพลาด',
+                            detail: result?.message || result?.statusMessage || 'เกิดข้อผิดพลาด',
                             life: 4000
                         });
                     }
                 } catch (error: any) {
                     toast.add({
                         severity: 'error',
-                        summary: 'Error',
-                        detail: error.statusMessage || error.message || 'An unexpected error occurred',
+                        summary: 'เกิดข้อผิดพลาด',
+                        detail: error.statusMessage || error.message || 'เกิดข้อผิดพลาด',
                         life: 4000
                     });
                 }
@@ -66,12 +66,12 @@ export const useAppConfirm = () => {
     // Specialized function for Delete
     const requireDelete = (onAccept: () => Promise<any>, detail = 'Record deleted') => {
         requireConfirm({
-            message: 'Do you want to delete this record?',
-            header: 'Delete Confirmation',
-            acceptLabel: 'Delete',
+            message: 'คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้',
+            header: 'ยืนยันการลบ',
+            acceptLabel: 'ลบ',
             acceptSeverity: 'danger',
             onAccept,
-            successSummary: 'Deleted',
+            successSummary: 'ลบแล้ว',
             successDetail: detail
         })
     }
@@ -79,13 +79,13 @@ export const useAppConfirm = () => {
     // Specialized function for Saving/Updating
     const requireSave = (onAccept: () => Promise<any>, detail = 'Changes saved successfully') => {
         requireConfirm({
-            message: 'Are you sure you want to save these changes?',
-            header: 'Save Confirmation',
+            message: 'คุณแน่ใจหรือไม่ว่าต้องการบันทึกการเปลี่ยนแปลงนี้',
+            header: 'ยืนยันการบันทึก',
             icon: 'pi pi-check-circle',
-            acceptLabel: 'Save',
+            acceptLabel: 'บันทึก',
             acceptSeverity: 'primary',
             onAccept,
-            successSummary: 'Saved',
+            successSummary: 'บันทึกแล้ว',
             successDetail: detail
         })
     }

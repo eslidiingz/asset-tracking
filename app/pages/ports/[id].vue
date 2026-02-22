@@ -58,7 +58,7 @@ const onDelete = (stock) => {
     requireDelete(async () => {
         await deleteStock(stock)
         await stockStore.fetchAssets()
-    }, `Stock has been deleted`)
+    }, `ลบหุ้นเรียบร้อยแล้ว`)
 };
 
 onMounted(() => {
@@ -74,7 +74,7 @@ onMounted(() => {
 
     <PortHeader :port :portValue :portCost :portProfit :portProfitPercentage :stocksRatio />
 
-    <PortEmpty v-if="stocks?.length === 0" title="No Stocks" description="Add a stock to get started" />
+    <PortEmpty v-if="stocks?.length === 0" title="ยังไม่มีหุ้น" description="เพิ่มหุ้นเพื่อเริ่มต้น" />
     <template v-else>
         <div class="space-y-2 mb-2">
             <div v-for="stock in stocks" :key="stock.id">
