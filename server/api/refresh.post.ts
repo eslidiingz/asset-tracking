@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     if (!refreshToken) {
         throw createError({
             statusCode: 401,
-            statusMessage: "Refresh token missing",
+            statusMessage: "ไม่พบ Refresh token",
         });
     }
 
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     } catch (error) {
         throw createError({
             statusCode: 401,
-            statusMessage: "Invalid refresh token",
+            statusMessage: "Refresh token ไม่ถูกต้อง",
         });
     }
 });

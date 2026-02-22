@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     if (!exist) {
         throw createError({
             status: 404,
-            statusMessage: 'Asset not found'
+            statusMessage: 'ไม่พบสินทรัพย์'
         })
     }
 
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
         throw createError({
             status: 422,
-            statusMessage: 'Invalid request body'
+            statusMessage: 'ข้อมูลไม่ถูกต้อง'
         })
     }
 
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: 'Asset updated successfully',
+        message: 'อัปเดตสินทรัพย์สำเร็จ',
         data: assetUpdated,
     }
 })

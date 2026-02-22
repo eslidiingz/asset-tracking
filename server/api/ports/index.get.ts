@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: 'Get ports successfully',
+        message: 'ค้นหาพอร์ตโฟลิโอสำเร็จ',
         data: ports
     }
 })

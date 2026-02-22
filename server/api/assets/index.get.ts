@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: "Get assets successfully",
+        message: "ค้นหาสินทรัพย์สำเร็จ",
         data: assets
     }
 })

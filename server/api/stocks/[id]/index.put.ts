@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     if (!validated.success) {
         return {
             success: false,
-            message: "Invalid body requested",
+            message: "ข้อมูลไม่ถูกต้อง",
             data: null
         }
     }
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: "Update stock successfully",
+        message: "อัปเดตหุ้นสำเร็จ",
         data: stockUpdated
     };
 })

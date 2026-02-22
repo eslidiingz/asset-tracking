@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     if (userRole !== 'ADMIN') {
         throw createError({
             statusCode: 403,
-            statusMessage: "Forbidden: Admin access required",
+            statusMessage: "ไม่ได้รับอนุญาต",
         });
     }
 
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: "Users fetched successfully",
+        message: "ค้นหาผู้ใช้สำเร็จ",
         data: users
     };
 });

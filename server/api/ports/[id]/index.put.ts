@@ -16,10 +16,9 @@ export default defineEventHandler(async (event) => {
     const validated = schema.safeParse(body)
 
     if (!validated.success) {
-        console.error('Validation error:', validated.error)
         throw createError({
             status: 422,
-            statusMessage: `Invalid data for portfolio update: ${validated.error.message}`,
+            statusMessage: `ข้อมูลไม่ถูกต้อง`,
         })
     }
 
@@ -34,7 +33,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: 'Port updated successfully',
+        message: 'อัปเดตพอร์ตโฟลิโอสำเร็จ',
         data: portUpdated,
     }
 })

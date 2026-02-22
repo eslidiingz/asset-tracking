@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: 'Stocks fetched successfully',
+        message: 'ค้นหาหุ้นสำเร็จ',
         data: stocks
     }
 })

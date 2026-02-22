@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     if (!asset) {
         throw createError({
             status: 404,
-            statusMessage: 'Asset not found'
+            statusMessage: 'ไม่พบสินทรัพย์'
         })
     }
 
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     if (!assetDeleted) {
         throw createError({
             status: 500,
-            statusMessage: 'Failed to delete asset'
+            statusMessage: 'ไม่สามารถลบสินทรัพย์ได้'
         })
     }
 

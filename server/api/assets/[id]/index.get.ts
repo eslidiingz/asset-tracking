@@ -22,13 +22,13 @@ export default defineEventHandler(async (event) => {
     if (!asset) {
         throw createError({
             statusCode: 404,
-            statusMessage: "Asset not found or access denied",
+            statusMessage: "ไม่พบสินทรัพย์หรือไม่ได้รับอนุญาต",
         })
     }
 
     return {
         success: true,
-        message: "Find asset successfully",
+        message: "ค้นหาสินทรัพย์สำเร็จ",
         data: asset
     }
 })

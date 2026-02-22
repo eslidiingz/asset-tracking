@@ -14,13 +14,13 @@ export default defineEventHandler(async (event) => {
     if (!userDeleted) {
         throw createError({
             status: 404,
-            statusMessage: 'User not found',
+            statusMessage: 'ไม่พบผู้ใช้',
         })
     }
 
     return {
         success: true,
-        message: 'User deleted successfully',
+        message: 'ลบผู้ใช้สำเร็จ',
         data: userDeleted,
     }
 })

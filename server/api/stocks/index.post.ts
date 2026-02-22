@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     if (!validated.success)
         throw createError({
             status: 422,
-            statusMessage: "Invalid body requested",
+            statusMessage: "ข้อมูลไม่ถูกต้อง",
         })
 
     const model = new StockModel;
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     if (symbolExists)
         throw createError({
             status: 422,
-            statusMessage: "Symbol already exists.",
+            statusMessage: "หุ้นนี้มีอยู่ในพอร์ตแล้ว",
         })
 
     const stock: Stock = validated.data;
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 
         return {
             success: true,
-            message: "Stock created successfully",
+            message: "เพิ่มหุ้นสำเร็จ",
             data: stockCreated
         }
     } catch (e) {

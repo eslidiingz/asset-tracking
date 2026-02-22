@@ -22,13 +22,13 @@ export default defineEventHandler(async (event) => {
     if (!data) {
         throw createError({
             statusCode: 404,
-            statusMessage: "Port not found or access denied",
+            statusMessage: "ไม่พบพอร์ตโฟลิโอหรือไม่ได้รับอนุญาต",
         })
     }
 
     return {
         success: true,
-        message: "Find port successfully",
+        message: "ค้นหาพอร์ตโฟลิโอสำเร็จ",
         data: data.port
     }
 })

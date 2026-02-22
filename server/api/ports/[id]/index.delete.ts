@@ -12,13 +12,13 @@ export default defineEventHandler(async (event) => {
     if (!portDeleted) {
         throw createError({
             status: 404,
-            statusMessage: 'Portfolio not found',
+            statusMessage: 'ไม่พบพอร์ตโฟลิโอ',
         })
     }
 
     return {
         success: true,
-        message: 'Port deleted successfully',
+        message: 'ลบพอร์ตโฟลิโอสำเร็จ',
         data: portDeleted,
     }
 })

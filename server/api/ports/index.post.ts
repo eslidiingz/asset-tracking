@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     if (!validated.success)
         throw createError({
             status: 422,
-            statusMessage: `Portfolio name is required`,
+            statusMessage: `ข้อมูลไม่ถูกต้อง`,
         })
 
     const userId = requireUserId(event);
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     if (!asset) {
         throw createError({
             status: 403,
-            statusMessage: 'Unauthorized: Direct access to this asset is not allowed'
+            statusMessage: 'ไม่ได้รับอนุญาต'
         })
     }
 
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: 'Port created successfully',
+        message: 'สร้างพอร์ตโฟลิโอสำเร็จ',
         data: portCreated,
     }
 })

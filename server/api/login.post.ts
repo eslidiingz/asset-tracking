@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     if (!username || !password) {
         throw createError({
             statusCode: 400,
-            statusMessage: "Username and password are required",
+            statusMessage: "ชื่อผู้ใช้และรหัสผ่านต้องไม่เป็นว่าง",
         });
     }
 
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     if (!user) {
         return {
             success: false,
-            message: "Invalid username or password"
+            message: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"
         }
     }
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     if (!isPasswordValid) {
         return {
             success: false,
-            message: "Invalid password"
+            message: "รหัสผ่านไม่ถูกต้อง"
         }
     }
 
@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: "Login successful",
+        message: "เข้าสู่ระบบสำเร็จ",
         user: userCredential,
         access_token: accessToken
     }

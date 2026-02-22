@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     if (!result.success)
         throw createError({
             status: 422,
-            statusMessage: `Asset name is required`,
+            statusMessage: `ข้อมูลไม่ถูกต้อง`,
         })
 
     const userId = requireUserId(event);
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 
     return {
         success: true,
-        message: 'Asset created successfully',
+        message: 'เพิ่มสินทรัพย์สำเร็จ',
         data: assetCreated,
     }
 });

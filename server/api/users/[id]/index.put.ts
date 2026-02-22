@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     if (isNaN(userId)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Invalid ID',
+            statusMessage: 'ไม่พบผู้ใช้',
         })
     }
 
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     if (!validated.success) {
         throw createError({
             status: 422,
-            statusMessage: "Invalid body requested",
+            statusMessage: "ข้อมูลไม่ถูกต้อง",
         })
     }
 
@@ -42,20 +42,20 @@ export default defineEventHandler(async (event) => {
         if (!userUpdated) {
             throw createError({
                 status: 404,
-                statusMessage: 'User not found',
+                statusMessage: 'ไม่พบผู้ใช้',
             })
         }
 
         return {
             success: true,
-            message: "User updated successfully",
+            message: "อัปเดตผู้ใช้สำเร็จ",
             data: userUpdated
         }
     } catch (error: any) {
         if (error.message?.includes('UNIQUE constraint failed: users.username')) {
             throw createError({
                 statusCode: 409,
-                statusMessage: "Username already exists",
+                statusMessage: "ชื่อผู้ใช้ซ้ำ",
             })
         }
         throw error

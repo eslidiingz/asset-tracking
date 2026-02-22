@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     if (userRole !== 'ADMIN') {
         throw createError({
             statusCode: 403,
-            statusMessage: "Forbidden: Admin access required",
+            statusMessage: "ไม่ได้รับอนุญาต",
         });
     }
 
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     if (!validated.success) {
         throw createError({
             status: 422,
-            statusMessage: "Invalid body requested",
+            statusMessage: "ข้อมูลไม่ถูกต้อง",
         })
     }
 
@@ -33,14 +33,14 @@ export default defineEventHandler(async (event) => {
 
         return {
             success: true,
-            message: "User created successfully",
+            message: "เพิ่มผู้ใช้สำเร็จ",
             data: userCreated
         }
     } catch (error: any) {
         if (error.message?.includes('UNIQUE constraint failed: users.username')) {
             throw createError({
                 statusCode: 409,
-                statusMessage: "Username already exists",
+                statusMessage: "ชื่อผู้ใช้ซ้ำ",
             })
         }
         throw error

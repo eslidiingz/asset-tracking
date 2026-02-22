@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   if (!stock) {
     throw createError({
       statusCode: 404,
-      statusMessage: "Stock not found",
+      statusMessage: "ไม่พบหุ้น",
     });
   }
 
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
 
   return {
     success: true,
-    message: "Stock deleted successfully",
+    message: "ลบหุ้นสำเร็จ",
     data: result,
   };
 });
