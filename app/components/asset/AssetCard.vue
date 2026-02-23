@@ -3,6 +3,10 @@ const props = defineProps({
     asset: {
         type: Object,
         required: true
+    },
+    totalValue: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -15,6 +19,14 @@ const onCardClick = (event: Event) => {
 
     navigateTo(`/assets/${props.asset.id}`)
 }
+
+const profitClass = computed(() => {
+    return props.asset.profitPercentage >= 0 ? 'text-green-400' : 'text-red-400';
+})
+
+const currentRatio = computed(() => {
+    return getCurrentRatio(props.asset.value, props.totalValue)
+})
 </script>
 
 <template>
@@ -43,11 +55,11 @@ const onCardClick = (event: Event) => {
                         <div class="flex justify-between">
                             <div>มูลค่า: <span class="text-primary font-bold">{{ formatNumber(asset?.value) }}</span>
                             </div>
-                            <UiCurrentRatio :value="asset.ratio" :target="100" />
+                            <UiCurrentRatio :value="currentRatio" :target="asset.ratio" />
                         </div>
 
                         <div class="flex justify-between">
-                            <div>กำไร: <span class="text-green-400">{{ formatNumber(asset?.profitAmount) }} ({{
+                            <div>กำไร: <span :class="profitClass">{{ formatNumber(asset?.profitAmount) }} ({{
                                 formatNumber(asset?.profitPercentage) }}%)</span></div>
                             <div>ต้นทุน: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
                         </div>

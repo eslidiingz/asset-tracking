@@ -21,6 +21,18 @@ const stockStore = useStockStore()
 const toast = useToast();
 const { isEditMode, form, isLoading, createStock, updateStock } = useStock()
 
+// States
+const typeOptions = ref([
+    {
+        label: 'หุ้น',
+        value: 'stock'
+    },
+    {
+        label: 'กองทุนรวม',
+        value: 'fund'
+    }
+]);
+
 // Computed
 const header = computed(() => `${isEditMode.value ? 'แก้ไข' : 'เพิ่ม'}หุ้น`)
 
@@ -74,6 +86,8 @@ const onNumericInput = (event: any, field: 'amount' | 'cost' | 'ratio', maxFract
     <div class="card flex justify-center">
         <Dialog class="w-full max-w-md mx-4" v-model:visible="visible" modal :header @hide="$emit('close')">
             <Form @submit="onSubmit" class="flex flex-col gap-2">
+                <SelectButton v-model="form.type" :options="typeOptions" optionLabel="label" optionValue="value"
+                    fluid />
 
                 <InputText id="symbol" name="symbol" type="text" placeholder="ตัวอย่าง: NVDA" required
                     v-model="form.symbol" @input="form.symbol = form.symbol?.toUpperCase()" class="w-full" autofocus />

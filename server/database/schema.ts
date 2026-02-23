@@ -30,6 +30,7 @@ export const portsTable = sqliteTable('ports', {
 export const stocksTable = sqliteTable('stocks', {
     id: int().primaryKey({ autoIncrement: true }),
     port_id: int().notNull().references(() => portsTable.id),
+    type: text({ enum: ['stock', 'fund'] }).default('stock'),
     symbol: text().notNull(),
     amount: real().notNull(),
     cost: real().notNull(),

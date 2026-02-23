@@ -4,7 +4,7 @@ import type { PriceList, Stock, StockForm } from "~/interfaces/stock.interface"
 // Shared State
 const isLoading = ref<boolean>(false)
 const stocks = ref<Stock[]>([])
-const form = reactive<StockForm>({})
+const form = reactive<StockForm>({ type: 'stock' })
 const isEditMode = ref<boolean>(false)
 
 export const useStock = () => {

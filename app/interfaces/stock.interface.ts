@@ -20,10 +20,11 @@ export interface PriceList {
 }
 
 export interface StockForm {
-    id?: number,
-    port_id?: number,
-    symbol?: string,
-    amount?: number,
-    cost?: number,
-    ratio?: number
+    id?: number;
+    port_id?: number;
+    type?: string;
+    symbol?: string;
+    amount?: number;
+    cost?: number;
+    ratio?: number;
 }

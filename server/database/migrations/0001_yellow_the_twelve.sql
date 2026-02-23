@@ -1,0 +1,1 @@
+ALTER TABLE `stocks` ADD `type` text DEFAULT 'stock';

@@ -23,6 +23,18 @@ const assetsTrackingValue = computed(() => {
     return assets.value?.reduce((acc, asset) => acc + (asset.value || 0), 0) || 0
 })
 
+const assetTrackingCost = computed(() => {
+    return assets.value?.reduce((acc, asset) => acc + (asset.cost || 0), 0) || 0
+})
+
+const assetTrackingProfitAmount = computed(() => {
+    return assets.value?.reduce((acc, asset) => acc + (asset.profitAmount || 0), 0) || 0
+})
+
+const assetTrackingProfitPercentage = computed(() => {
+    return assets.value?.reduce((acc, asset) => acc + (asset.profitPercentage || 0), 0) || 0
+})
+
 // Methods
 const onEditAsset = (asset: Asset) => {
     editingAsset.value = asset;
@@ -57,7 +69,8 @@ const onUpdateAssets = async () => {
 
 
 <template>
-    <AssetTrackingHeader :value="assetsTrackingValue" />
+    <AssetTrackingHeader :value="assetsTrackingValue" :cost="assetTrackingCost" :profit="assetTrackingProfitAmount"
+        :profitPercentage="assetTrackingProfitPercentage" />
 
     <PortEmpty v-if="assets?.length === 0" />
 
@@ -69,7 +82,8 @@ const onUpdateAssets = async () => {
 
         <div class="space-y-2 mb-6">
             <div v-for="asset in assets" :key="asset.id">
-                <AssetCard :asset="asset" @edit="onEditAsset(asset)" @delete="onDeleteAsset(asset)" />
+                <AssetCard :asset="asset" :totalValue="assetsTrackingValue" @edit="onEditAsset(asset)"
+                    @delete="onDeleteAsset(asset)" />
             </div>
         </div>
     </template>
