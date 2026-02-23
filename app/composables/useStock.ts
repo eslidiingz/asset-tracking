@@ -111,6 +111,7 @@ export const useStock = () => {
                 amount: undefined,
                 cost: undefined,
                 total_cost: undefined,
+                price: undefined,
                 value: undefined,
                 ratio: undefined
             })
