@@ -12,7 +12,7 @@ const props = defineProps({
         type: Number,
         default: 0
     },
-    profitPercentage: {
+    profit_percentage: {
         type: Number,
         default: 0
     }
@@ -49,7 +49,7 @@ const classProfit = computed(() => {
             <div>
                 <span>กำไร: </span>
                 <span :class="classProfit">
-                    {{ formatNumber(profit) }} ({{ formatNumber(profitPercentage) }}%)
+                    {{ formatNumber(profit) }} ({{ formatNumber(profit_percentage) }}%)
                 </span>
             </div>
         </div>

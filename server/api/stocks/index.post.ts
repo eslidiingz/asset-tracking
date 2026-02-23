@@ -22,23 +22,30 @@ export default defineEventHandler(async (event) => {
 
     const stock: Stock = validated.data;
 
-    // ส่งไป Google Script (ถ้ายังจำเป็นต้องใช้)
-    try {
-        await $fetch(`https://script.google.com/macros/s/AKfycbzuqFKPuH_g9ySbQGii4gu_YdQG0mh9n5sVfSKENfzb3sg0uWlsqSYJ8azb_Pf2kgezsw/exec`, {
-            method: 'POST',
-            body: stock
-        })
-
-        // บันทึกข้อมูลลง Database
-        const stockCreated = await model.create(stock);
-
-        return {
-            success: true,
-            message: "เพิ่มหุ้นสำเร็จ",
-            data: stockCreated
+    if (stock.type === 'stock') {
+        // ส่งไป Google Script (ถ้ายังจำเป็นต้องใช้)
+        try {
+            await $fetch(`https://script.google.com/macros/s/AKfycbzuqFKPuH_g9ySbQGii4gu_YdQG0mh9n5sVfSKENfzb3sg0uWlsqSYJ8azb_Pf2kgezsw/exec`, {
+                method: 'POST',
+                body: stock
+            })
+        } catch (e) {
+            console.error('External API failed, but continuing to local DB', e)
+            return
         }
-    } catch (e) {
-        console.error('External API failed, but continuing to local DB', e)
+    } else if (stock.type === 'crypto') {
+
+    } else if (stock.type === 'fund') {
+
+    }
+
+    // บันทึกข้อมูลลง Database
+    const stockCreated = await model.create(stock);
+
+    return {
+        success: true,
+        message: "เพิ่มหุ้นสำเร็จ",
+        data: stockCreated
     }
 
 })

@@ -1,16 +1,17 @@
 export interface Stock {
     id: number;
     port_id: number;
+    type?: 'stock' | 'fund' | 'crypto';
     symbol: string;
     amount: number;
     cost: number;
+    total_cost: number;
+    price: number;
+    value: number | null;
     sequence: number | null;
     ratio: number | null;
-    price?: number;
-    totalCost?: number;
-    profitAmount?: number;
-    profitPercentage?: number;
-    value?: number;
+    profit_amount?: number;
+    profit_percentage?: number;
 }
 
 export interface PriceList {
@@ -22,9 +23,12 @@ export interface PriceList {
 export interface StockForm {
     id?: number;
     port_id?: number;
-    type?: string;
+    type?: 'stock' | 'fund' | 'crypto';
     symbol?: string;
     amount?: number;
     cost?: number;
-    ratio?: number;
+    total_cost?: number;
+    price?: number;
+    value?: number | null;
+    ratio?: number | null;
 }

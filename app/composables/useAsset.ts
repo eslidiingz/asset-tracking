@@ -5,15 +5,19 @@ export const useAsset = () => {
     const isLoading: Ref<boolean> = ref<boolean>(false);
     const form = reactive<Omit<Asset, 'id' | 'user_id' | 'sequence'>>({
         name: null,
+        currency: 'usd',
         description: null,
         ratio: null
     })
     const { assets } = storeToRefs(useAssetStore())
 
     const resetForm = () => {
-        form.name = null;
-        form.description = null;
-        form.ratio = null;
+        Object.assign(form, {
+            name: null,
+            description: null,
+            ratio: null,
+            currency: 'usd'
+        })
     }
 
     const fetchAssets = async () => {

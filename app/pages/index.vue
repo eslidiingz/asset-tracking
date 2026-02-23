@@ -28,11 +28,11 @@ const assetTrackingCost = computed(() => {
 })
 
 const assetTrackingProfitAmount = computed(() => {
-    return assets.value?.reduce((acc, asset) => acc + (asset.profitAmount || 0), 0) || 0
+    return assets.value?.reduce((acc, asset) => acc + (asset.profit_amount || 0), 0) || 0
 })
 
 const assetTrackingProfitPercentage = computed(() => {
-    return assets.value?.reduce((acc, asset) => acc + (asset.profitPercentage || 0), 0) || 0
+    return assets.value?.reduce((acc, asset) => acc + (asset.profit_percentage || 0), 0) || 0
 })
 
 // Methods
@@ -70,7 +70,7 @@ const onUpdateAssets = async () => {
 
 <template>
     <AssetTrackingHeader :value="assetsTrackingValue" :cost="assetTrackingCost" :profit="assetTrackingProfitAmount"
-        :profitPercentage="assetTrackingProfitPercentage" />
+        :profit_percentage="assetTrackingProfitPercentage" />
 
     <PortEmpty v-if="assets?.length === 0" />
 

@@ -4,6 +4,7 @@ import z from "zod";
 
 export const assetSchema = z.object({
     name: z.string(),
+    currency: z.enum(['usd', 'thb']),
     description: z.string().nullable().optional(),
     ratio: z.number().nullable().optional(),
 })

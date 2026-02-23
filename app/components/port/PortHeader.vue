@@ -40,7 +40,7 @@ const classProfit = computed(() => {
 
             <div class="text-right">
                 <div>กำไร: <span :class="classProfit">{{ formatNumber(portProfit || 0) }} ({{
-                    formatNumber(portProfitPercentage || 0) }}%)</span>
+                    formatNumber(portProfitPercentage || 0, 2) }}%)</span>
                 </div>
                 <div>ต้นทุน: <span class="text-blue-400 font-bold">{{ formatNumber(portCost || 0) }}</span></div>
             </div>

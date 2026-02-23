@@ -21,7 +21,7 @@ const onCardClick = (event: Event) => {
 }
 
 const profitClass = computed(() => {
-    return props.asset.profitPercentage >= 0 ? 'text-green-400' : 'text-red-400';
+    return (props.asset.profit_percentage || 0) >= 0 ? 'text-green-400' : 'text-red-400';
 })
 
 const currentRatio = computed(() => {
@@ -35,11 +35,12 @@ const currentRatio = computed(() => {
         <Card class="card-port overflow-hidden border border-gray-100 dark:border-gray-800 shadow-sm">
             <template #title>
                 <div class="flex justify-between items-center">
-                    <div>
-                        <h3 class="font-bold  text-lg text-gray-900 dark:text-gray-100 truncate">
+                    <div class="mb-1">
+                        <h3 class="font-bold flex gap-x-1 text-lg text-gray-900 dark:text-gray-100 truncate">
                             {{ asset.name }}
                             <UiTag>{{ `${asset?.ports?.length} Port${(asset?.ports?.length || 0) !== 1 ? 's' : ''}` }}
                             </UiTag>
+                            <UiTag variant="secondary">{{ asset.currency.toUpperCase() }}</UiTag>
                         </h3>
                         <p class="text-sm text-gray-500 line-clamp-1 italic leading-snug">
                             {{ asset.description }}
@@ -59,8 +60,8 @@ const currentRatio = computed(() => {
                         </div>
 
                         <div class="flex justify-between">
-                            <div>กำไร: <span :class="profitClass">{{ formatNumber(asset?.profitAmount) }} ({{
-                                formatNumber(asset?.profitPercentage) }}%)</span></div>
+                            <div>กำไร: <span :class="profitClass">{{ formatNumber(asset?.profit_amount) }} ({{
+                                formatNumber(asset?.profit_percentage) }}%)</span></div>
                             <div>ต้นทุน: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
                         </div>
                     </div>

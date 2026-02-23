@@ -6,8 +6,8 @@ const props = defineProps<{
 }>()
 
 const classProfit = computed(() => {
-    if (!props.asset?.profitPercentage) return ''
-    return props.asset?.profitPercentage > 0 ? 'text-green-400 font-bold' : 'text-red-400 font-bold'
+    if (!props.asset?.profit_percentage) return ''
+    return props.asset?.profit_percentage > 0 ? 'text-green-400 font-bold' : 'text-red-400 font-bold'
 })
 </script>
 
@@ -25,12 +25,12 @@ const classProfit = computed(() => {
 
         <div class="flex justify-between items-center">
             <div class="text-sm">ต้นทุน: <span class="text-blue-400 font-bold">{{ formatNumber(asset?.cost || 0)
-                    }}</span>
+            }}</span>
             </div>
             <div class="flex items-center gap-0.5 text-sm">
                 <span>กำไร: </span>
                 <span :class="classProfit">{{
-                    formatNumber(asset?.profitAmount || 0) }} ({{ formatNumber(asset?.profitPercentage || 0, 2)
+                    formatNumber(asset?.profit_amount || 0) }} ({{ formatNumber(asset?.profit_percentage || 0, 2)
                     }}%)</span>
             </div>
         </div>

@@ -15,6 +15,18 @@ const { form, createAsset, updateAsset, resetForm, setForm, isLoading } = useAss
 
 const remainingRatio = 0
 
+// --- States ---
+const currencyOptions = ref([
+    {
+        label: 'USD',
+        value: 'usd'
+    },
+    {
+        label: 'THB',
+        value: 'thb'
+    }
+]);
+
 watch(() => props.asset, (newAsset) => {
     if (newAsset) {
         setForm(newAsset)
@@ -58,6 +70,9 @@ const onSubmit = async () => {
         class="w-full max-w-lg mx-2 md:mx-0" :breakpoints="{ '960px': '75vw', '641px': '95vw' }" @hide="onCloseModal">
         <Form @submit="onSubmit" class="mt-2">
             <div class="space-y-2 mb-6">
+                <SelectButton v-model="form.currency" :options="currencyOptions" optionLabel="label" optionValue="value"
+                    fluid />
+
                 <div class="flex flex-col gap-1.5">
                     <InputText id="name" name="name" type="text" placeholder="ตัวอย่าง: Crypto, US Stocks, Gold"
                         required v-model="form.name" class="w-full h-12" autofocus />

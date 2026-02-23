@@ -106,9 +106,12 @@ export const useStock = () => {
             Object.assign(form, {
                 id: undefined,
                 port_id: undefined,
+                type: 'stock',
                 symbol: undefined,
                 amount: undefined,
                 cost: undefined,
+                total_cost: undefined,
+                value: undefined,
                 ratio: undefined
             })
         })

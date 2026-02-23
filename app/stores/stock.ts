@@ -9,8 +9,8 @@ interface Asset {
     sequence: number
     cost?: number
     value?: number
-    profitAmount?: number
-    profitPercentage?: number
+    profit_amount?: number
+    profit_percentage?: number
     ports: Port[]
 }
 
@@ -40,10 +40,10 @@ export const useStockStore = defineStore('stock', () => {
                     return {
                         ...stock,
                         price: stockPrice(stock),
-                        totalCost: stockTotalCost(stock),
+                        total_cost: stockTotalCost(stock),
                         value: stockValue(stock),
-                        profitAmount: stockProfitAmount(stock),
-                        profitPercentage: stockProfitPercentage(stock)
+                        profit_amount: stockProfitAmount(stock),
+                        profit_percentage: stockProfitPercentage(stock)
                     }
                 })
 
@@ -51,23 +51,23 @@ export const useStockStore = defineStore('stock', () => {
                     ...port,
                     cost: portTotalCost(port),
                     value: portValue(port),
-                    profitAmount: portProfitAmount(port),
-                    profitPercentage: portProfitPercentage(port),
+                    profit_amount: portProfitAmount(port),
+                    profit_percentage: portProfitPercentage(port),
                     stocks
                 }
             })
 
             const cost = assetTotalCost(ports)
             const value = assetValue(ports)
-            const profitAmount = assetProfitAmount(ports)
-            const profitPercentage = assetProfitPercentage(ports)
+            const profit_amount = assetProfitAmount(ports)
+            const profit_percentage = assetProfitPercentage(ports)
 
             return {
                 ...asset,
                 cost,
                 value,
-                profitAmount,
-                profitPercentage,
+                profit_amount,
+                profit_percentage,
                 ports
             }
         })
@@ -80,17 +80,24 @@ export const useStockStore = defineStore('stock', () => {
 
     const portTotalCost = (port: Port) => (port.stocks || []).reduce((acc, stock) => acc + (stock.cost * stock.amount), 0)
     const portValue = (port: Port) => {
-        return (port.stocks || []).reduce((acc, stock) => acc + stockValue(stock), 0)
+        return (port.stocks || []).reduce((acc, stock) => acc + (stock.value || stockPrice(stock) * stock.amount), 0)
     }
 
     const portProfitAmount = (port: Port) => portValue(port) - portTotalCost(port)
-    const portProfitPercentage = (port: Port) => portProfitAmount(port) / portTotalCost(port) * 100
+    const portProfitPercentage = (port: Port) => portTotalCost(port) > 0 ? (portProfitAmount(port) / portTotalCost(port) * 100) : 0
 
-    const stockPrice = (stock: Stock) => priceList.value.find((price) => price.symbol === stock.symbol)?.price || 0
-    const stockTotalCost = (stock: Stock) => stock.cost * stock.amount
-    const stockValue = (stock: Stock) => stockPrice(stock) * stock.amount
+    const stockPrice = (stock: Stock) => {
+        switch (stock.type) {
+            case 'stock':
+                return priceList.value.find((price) => price.symbol === stock.symbol)?.price || 0
+            default:
+                return stock.price || 0
+        }
+    }
+    const stockTotalCost = (stock: Stock) => stock.total_cost || stock.cost * stock.amount
+    const stockValue = (stock: Stock) => stock.value || stockPrice(stock) * stock.amount
     const stockProfitAmount = (stock: Stock) => stockValue(stock) - stockTotalCost(stock)
-    const stockProfitPercentage = (stock: Stock) => stockProfitAmount(stock) / stockTotalCost(stock) * 100
+    const stockProfitPercentage = (stock: Stock) => stockTotalCost(stock) > 0 ? (stockProfitAmount(stock) / stockTotalCost(stock) * 100) : 0
 
     const currentRatio = (value: number, totalValue: number) => totalValue > 0 ? (value / totalValue) * 100 : 0
 

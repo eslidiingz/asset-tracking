@@ -12,6 +12,7 @@ export const usersTable = sqliteTable('users', {
 export const assetsTable = sqliteTable('assets', {
     id: int().primaryKey({ autoIncrement: true }),
     user_id: int().notNull().references(() => usersTable.id),
+    currency: text({ enum: ['usd', 'thb'] }).default('usd'),
     name: text().notNull(),
     description: text(),
     ratio: real(),
@@ -30,10 +31,13 @@ export const portsTable = sqliteTable('ports', {
 export const stocksTable = sqliteTable('stocks', {
     id: int().primaryKey({ autoIncrement: true }),
     port_id: int().notNull().references(() => portsTable.id),
-    type: text({ enum: ['stock', 'fund'] }).default('stock'),
+    type: text({ enum: ['stock', 'fund', 'crypto'] }).default('stock'),
     symbol: text().notNull(),
-    amount: real().notNull(),
-    cost: real().notNull(),
+    amount: real().notNull(), // Amount of unit to have
+    cost: real().notNull(), // Average cost per unit
+    total_cost: real(),
+    price: real(),
+    value: real(), // For funds or manual tracking
     sequence: int().default(0),
     ratio: real(),
 })

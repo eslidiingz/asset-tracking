@@ -8,8 +8,8 @@ export interface Port {
     ratio: number | null;
     sequence: number | null;
     cost?: number;
-    profitAmount?: number;
-    profitPercentage?: number;
+    profit_amount?: number;
+    profit_percentage?: number;
     value?: number;
     stocks?: Stock[];
 }

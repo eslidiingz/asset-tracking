@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+import type { Stock } from '~/interfaces/stock.interface';
+
 const route = useRoute();
 const portId = Number(route.params.id);
 
@@ -24,14 +26,18 @@ const { assets } = storeToRefs(stockStore)
 // Computed
 const asset = computed(() => assets.value?.find(asset => asset.id === portData.value?.asset_id))
 const port = computed(() => asset.value?.ports?.find(port => port.id === portId))
-const stocks = computed(() => port.value?.stocks)
+const stocks = computed(() => port.value?.stocks as Stock[])
 
-const portCost = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + stock.cost * stock.amount, 0) || 0)
-const portValue = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + (findSymbol(stock.symbol)?.price || 0) * stock.amount, 0) || 0)
+const portCost = computed(() => port.value?.stocks?.reduce(
+    (acc, stock) => (stock.type === 'stock')
+        ? acc + stock.cost * stock.amount
+        : acc + stock.total_cost, 0
+) || 0)
+
+const portValue = computed(() => port.value?.value || 0);
 const portProfit = computed(() => portValue.value - portCost.value)
-const portProfitPercentage = computed(() => portProfit.value / portCost.value * 100)
-
-const stocksRatio = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + stock.ratio, 0) || 0)
+const portProfitPercentage = computed(() => portCost.value > 0 ? (portProfit.value / portCost.value * 100) : 0)
+const stocksRatio = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + (stock?.ratio || 0), 0) || 0)
 
 // States
 const visible = ref(false);
@@ -43,18 +49,13 @@ const onCloseModal = () => {
     isEditMode.value = false;
 }
 
-const onEdit = (stock) => {
+const onEdit = (stock: Stock) => {
     isEditMode.value = true;
-    form.id = stock.id;
-    form.port_id = stock.port_id;
-    form.symbol = stock.symbol;
-    form.amount = stock.amount;
-    form.cost = stock.cost;
-    form.ratio = stock.ratio;
+    Object.assign(form, stock)
     visible.value = true;
 }
 
-const onDelete = (stock) => {
+const onDelete = (stock: Stock) => {
     requireDelete(async () => {
         await deleteStock(stock)
         await stockStore.fetchAssets()
@@ -72,13 +73,14 @@ onMounted(() => {
         <ProgressSpinner stroke-width="5" />
     </div>
 
-    <PortHeader :port :portValue :portCost :portProfit :portProfitPercentage :stocksRatio />
+    <PortHeader v-if="port" :port="port" :portValue :portCost :portProfit :portProfitPercentage :stocksRatio />
 
     <PortEmpty v-if="stocks?.length === 0" title="ยังไม่มีหุ้น" description="เพิ่มหุ้นเพื่อเริ่มต้น" />
     <template v-else>
         <div class="space-y-2 mb-2">
             <div v-for="stock in stocks" :key="stock.id">
-                <StockCard :stock :portValue @edit="onEdit" @delete="onDelete" />
+                <StockCard v-if="stock.type === 'stock'" :stock :portValue @edit="onEdit" @delete="onDelete" />
+                <StockFundCard v-else-if="stock.type === 'fund'" :stock :portValue @edit="onEdit" @delete="onDelete" />
             </div>
         </div>
     </template>

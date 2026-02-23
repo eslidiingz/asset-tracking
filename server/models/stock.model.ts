@@ -5,9 +5,13 @@ import { stocksTable } from "../database/schema";
 export const stockSchema = z.object({
     id: z.number().optional(),
     port_id: z.number(),
+    type: z.enum(['stock', 'fund', 'crypto']),
     symbol: z.string(),
     amount: z.number(),
     cost: z.number(),
+    total_cost: z.number().optional().nullable(),
+    price: z.number().optional().nullable(),
+    value: z.number().optional().nullable(),
     ratio: z.number().optional().nullable(),
 })
 
