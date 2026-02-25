@@ -18,19 +18,31 @@ const onNumericInput = (event: any, field: 'amount' | 'cost' | 'ratio', maxFract
 </script>
 
 <template>
-    <InputText id="symbol" name="symbol" type="text" placeholder="ตัวอย่าง: NVDA" required v-model="form.symbol"
-        @input="form.symbol = form.symbol?.toUpperCase()" class="w-full" autofocus />
+    <FloatLabel variant="on">
+        <InputText id="symbol" name="symbol" type="text" placeholder="ตัวอย่าง: NVDA" required v-model="form.symbol"
+            @input="form.symbol = form.symbol?.toUpperCase()" class="w-full" autofocus />
+        <label for="symbol">ชื่อเหรียญ</label>
+    </FloatLabel>
 
-    <InputText id="amount" name="amount" placeholder="จำนวนหุ้นที่มี" inputmode="decimal" required v-model="form.amount"
-        @input="onNumericInput($event, 'amount', 8)" class="w-full" />
+    <FloatLabel variant="on">
+        <InputText id="amount" name="amount" inputmode="decimal" required v-model="form.amount"
+            @input="onNumericInput($event, 'amount', 8)" class="w-full" />
+        <label for="amount">จำนวนหุ้นที่มี</label>
+    </FloatLabel>
 
-    <InputText id="cost" name="cost" placeholder="ราคาต้นทุนเฉลี่ย" inputmode="decimal" required v-model="form.cost"
-        @input="onNumericInput($event, 'cost', 8)" class="w-full" />
+    <FloatLabel variant="on">
+        <InputText id="cost" name="cost" inputmode="decimal" required v-model="form.cost"
+            @input="onNumericInput($event, 'cost', 8)" class="w-full" />
+        <label for="cost">ราคาต้นทุนเฉลี่ย</label>
+    </FloatLabel>
 
     <div class="flex flex-col gap-1 w-full">
         <InputGroup>
-            <InputText id="ratio" name="ratio" placeholder="สัดส่วนหุ้นเป้าหมาย" inputmode="decimal"
-                v-model="form.ratio" @input="onNumericInput($event, 'ratio', 2)" class="w-full" />
+            <FloatLabel variant="on">
+                <InputText id="ratio" name="ratio" inputmode="decimal" v-model="form.ratio"
+                    @input="onNumericInput($event, 'ratio', 2)" class="w-full" />
+                <label for="ratio">สัดส่วนหุ้นเป้าหมาย</label>
+            </FloatLabel>
             <InputGroupAddon>%</InputGroupAddon>
         </InputGroup>
     </div>

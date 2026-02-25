@@ -13,7 +13,7 @@ export const useStock = () => {
     const { $api } = useNuxtApp()
 
     // Computed
-    const ratio = computed(() => stocks.value.reduce((acc, stock) => acc + stock.ratio, 0))
+    const ratio = computed(() => stocks.value.reduce((acc, stock) => acc + (stock.ratio || 0), 0))
     const remainingRatio = computed(() => 100 - ratio.value)
 
     // Methods
@@ -77,7 +77,8 @@ export const useStock = () => {
         if (stockStore.priceList.length > 0) return
 
         try {
-            const result = await $fetch(`https://script.google.com/macros/s/AKfycbzuqFKPuH_g9ySbQGii4gu_YdQG0mh9n5sVfSKENfzb3sg0uWlsqSYJ8azb_Pf2kgezsw/exec`)
+            const config = useRuntimeConfig()
+            const result = await $fetch(config.public.priceListApi as string)
             stockStore.priceList = result as PriceList[]
         } catch (error) {
             console.error('Failed to fetch price list', error)

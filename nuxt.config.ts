@@ -13,6 +13,11 @@ export default defineNuxtConfig({
       ]
     }
   },
+  runtimeConfig: {
+    public: {
+      priceListApi: process.env.PRICE_LIST_API
+    }
+  },
   modules: [
     "@primevue/nuxt-module",
     "@nuxt/fonts",

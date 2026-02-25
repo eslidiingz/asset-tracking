@@ -65,25 +65,33 @@ const onSubmit = async () => {
         <Form @submit="onSubmit" class="mt-2">
             <div class="space-y-2 mb-6">
                 <div class="flex flex-col gap-1.5">
-                    <InputText id="name" name="name" type="text"
-                        placeholder="ตัวอย่าง: หุ้นเติบโต, หุ้นเสี่ยงสูง, หุ้นปันผล" required v-model="form.name"
-                        class="w-full h-12" autofocus />
+                    <FloatLabel variant="on">
+                        <InputText id="name" name="name" type="text"
+                            placeholder="ตัวอย่าง: หุ้นเติบโต, หุ้นเสี่ยงสูง, หุ้นปันผล" required v-model="form.name"
+                            class="w-full h-12" autofocus />
+                        <label for="name">ชื่อพอร์ต</label>
+                    </FloatLabel>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                    <InputText id="description" name="description" placeholder="รายละเอียด (ไม่จำเป็น)"
-                        v-model="form.description" class="w-full h-12" />
+                    <FloatLabel variant="on">
+                        <InputText id="description" name="description" v-model="form.description" class="w-full h-12" />
+                        <label for="description">รายละเอียด (ไม่จำเป็น)</label>
+                    </FloatLabel>
                 </div>
 
                 <div class="flex flex-col gap-1.5">
                     <InputGroup>
-                        <InputText v-model="form.ratio" id="ratio" name="ratio" placeholder="สัดส่วนเป้าหมาย %"
-                            inputmode="decimal" @input="onNumericInput($event, 'ratio', 2)" class="w-full h-12" />
+                        <FloatLabel variant="on">
+                            <InputText v-model="form.ratio" id="ratio" name="ratio" inputmode="decimal"
+                                @input="onNumericInput($event, 'ratio', 2)" class="w-full h-12" />
+                            <label for="ratio">สัดส่วนเป้าหมาย %</label>
+                        </FloatLabel>
                         <InputGroupAddon>%</InputGroupAddon>
                     </InputGroup>
                     <div class="flex justify-between items-center px-1">
                         <small class="text-xs text-gray-500">สัดส่วนพอร์ตที่เหลือ: {{ (100 - remainingRatio).toFixed(2)
-                        }}%</small>
+                            }}%</small>
                     </div>
                 </div>
             </div>

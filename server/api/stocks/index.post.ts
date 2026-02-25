@@ -25,7 +25,8 @@ export default defineEventHandler(async (event) => {
     if (stock.type === 'stock') {
         // ส่งไป Google Script (ถ้ายังจำเป็นต้องใช้)
         try {
-            await $fetch(`https://script.google.com/macros/s/AKfycbzuqFKPuH_g9ySbQGii4gu_YdQG0mh9n5sVfSKENfzb3sg0uWlsqSYJ8azb_Pf2kgezsw/exec`, {
+            const config = useRuntimeConfig()
+            await $fetch(config.public.priceListApi as string, {
                 method: 'POST',
                 body: stock
             })

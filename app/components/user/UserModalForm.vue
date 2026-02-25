@@ -67,25 +67,31 @@ const onSubmit = async () => {
 </script>
 
 <template>
-    <Dialog v-model:visible="isVisible" :header="form.id ? 'Edit User' : 'Create User'" modal
+    <Dialog v-model:visible="isVisible" :header="form.id ? 'แก้ไขผู้ใช้งาน' : 'เพิ่มผู้ใช้งาน'" modal
         class="w-full max-w-lg mx-4 md:mx-0" :breakpoints="{ '960px': '75vw', '641px': '95vw' }">
         <Form @submit="onSubmit" class="mt-2">
             <div class="space-y-2">
-                <div class="flex flex-col">
-                    <InputText type="text" id="username" name="username" v-model="form.username"
-                        placeholder="Enter username" required autofocus />
+                <div class="flex flex-col mt-2">
+                    <FloatLabel variant="on">
+                        <InputText type="text" class="w-full" id="username" name="username" v-model="form.username"
+                            required autofocus />
+                        <label for="username">ชื่อผู้ใช้งาน</label>
+                    </FloatLabel>
                 </div>
 
-                <div class="flex flex-col">
-                    <InputText type="password" id="password" name="password" v-model="form.password"
-                        placeholder="Enter password" :required="!form.id" />
+                <div class="flex flex-col mt-2">
+                    <FloatLabel variant="on">
+                        <InputText type="password" class="w-full" id="password" name="password" v-model="form.password"
+                            :required="!form.id" />
+                        <label for="password">รหัสผ่าน</label>
+                    </FloatLabel>
                 </div>
 
                 <div class="flex items-center">
                     <div class="flex items-center gap-2">
                         <Checkbox v-model="form.is_active" inputId="isActive" name="isActive" binary :trueValue="1"
                             :falseValue="0" />
-                        <label for="isActive"> Active Account </label>
+                        <label for="isActive"> เปิดใช้งานบัญชี </label>
                     </div>
                 </div>
             </div>
@@ -93,9 +99,9 @@ const onSubmit = async () => {
             <div class="flex flex-col justify-between gap-3 mt-4">
                 <Button type="submit" :loading="isLoading">
                     <Icon name="lucide:save" />
-                    <span>{{ form.id ? 'Update Changes' : 'Create User' }}</span>
+                    <span>{{ form.id ? 'แก้ไขผู้ใช้' : 'เพิ่มผู้ใช้' }}</span>
                 </Button>
-                <Button type="button" label="Cancel" severity="secondary" @click="onCloseModal" />
+                <Button type="button" label="ยกเลิก" severity="secondary" @click="onCloseModal" />
             </div>
         </Form>
     </Dialog>

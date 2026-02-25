@@ -22,7 +22,8 @@ export const useStockStore = defineStore('stock', () => {
     const fetchPriceList = async () => {
         if (priceList.value.length > 0) return
 
-        const result = await $fetch(`https://script.google.com/macros/s/AKfycbzuqFKPuH_g9ySbQGii4gu_YdQG0mh9n5sVfSKENfzb3sg0uWlsqSYJ8azb_Pf2kgezsw/exec`);
+        const config = useRuntimeConfig()
+        const result = await $fetch(config.public.priceListApi as string);
 
         priceList.value = result as PriceList[]
     }
