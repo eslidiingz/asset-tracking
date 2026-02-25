@@ -27,15 +27,10 @@ const asset = computed(() => assets.value?.find(asset => asset.id === portData.v
 const port = computed(() => asset.value?.ports?.find(port => port.id === portId))
 const stocks = computed(() => port.value?.stocks as Stock[])
 
-const portCost = computed(() => port.value?.stocks?.reduce(
-    (acc, stock) => (stock.type === 'stock')
-        ? acc + stock.cost * stock.amount
-        : acc + stock.total_cost, 0
-) || 0)
-
+const portCost = computed(() => port.value?.cost || 0);
 const portValue = computed(() => port.value?.value || 0);
-const portProfit = computed(() => portValue.value - portCost.value)
-const portProfitPercentage = computed(() => portCost.value > 0 ? (portProfit.value / portCost.value * 100) : 0)
+const portProfit = computed(() => port.value?.profit_amount || 0);
+const portProfitPercentage = computed(() => port.value?.profit_percentage || 0);
 const stocksRatio = computed(() => port.value?.stocks?.reduce((acc, stock) => acc + (stock?.ratio || 0), 0) || 0)
 
 // States

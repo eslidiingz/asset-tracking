@@ -79,9 +79,9 @@ export const useStockStore = defineStore('stock', () => {
     const assetProfitAmount = (ports: Port[]) => assetValue(ports) - assetTotalCost(ports)
     const assetProfitPercentage = (ports: Port[]) => assetTotalCost(ports) > 0 ? (assetProfitAmount(ports) / assetTotalCost(ports)) * 100 : 0
 
-    const portTotalCost = (port: Port) => (port.stocks || []).reduce((acc, stock) => acc + (stock.cost * stock.amount), 0)
+    const portTotalCost = (port: Port) => (port.stocks || []).reduce((acc, stock) => acc + stockTotalCost(stock), 0)
     const portValue = (port: Port) => {
-        return (port.stocks || []).reduce((acc, stock) => acc + (stock.value || stockPrice(stock) * stock.amount), 0)
+        return (port.stocks || []).reduce((acc, stock) => acc + stockValue(stock), 0)
     }
 
     const portProfitAmount = (port: Port) => portValue(port) - portTotalCost(port)
@@ -95,8 +95,14 @@ export const useStockStore = defineStore('stock', () => {
                 return stock.price || 0
         }
     }
-    const stockTotalCost = (stock: Stock) => stock.total_cost || stock.cost * stock.amount
-    const stockValue = (stock: Stock) => stock.value || stockPrice(stock) * stock.amount
+    const stockTotalCost = (stock: Stock) => {
+        if (stock.type === 'stock') return stock.cost * stock.amount;
+        return stock.total_cost || stock.cost * stock.amount;
+    }
+    const stockValue = (stock: Stock) => {
+        if (stock.type === 'stock') return stockPrice(stock) * stock.amount;
+        return stock.value || stockPrice(stock) * stock.amount;
+    }
     const stockProfitAmount = (stock: Stock) => stockValue(stock) - stockTotalCost(stock)
     const stockProfitPercentage = (stock: Stock) => stockTotalCost(stock) > 0 ? (stockProfitAmount(stock) / stockTotalCost(stock) * 100) : 0
 
