@@ -7,6 +7,10 @@ const props = defineProps({
     totalValue: {
         type: Number,
         default: 0
+    },
+    usdRate: {
+        type: Number,
+        default: 1
     }
 })
 
@@ -24,8 +28,23 @@ const profitClass = computed(() => {
     return (props.asset.profit_percentage || 0) >= 0 ? 'text-green-400' : 'text-red-400';
 })
 
+const displayValue = computed(() => {
+    const val = props.asset?.value || 0
+    return props.asset.currency === 'usd' ? val * props.usdRate : val
+})
+
+const displayCost = computed(() => {
+    const cost = props.asset?.cost || 0
+    return props.asset.currency === 'usd' ? cost * props.usdRate : cost
+})
+
+const displayProfitAmount = computed(() => {
+    const profit = props.asset?.profit_amount || 0
+    return props.asset.currency === 'usd' ? profit * props.usdRate : profit
+})
+
 const currentRatio = computed(() => {
-    return getCurrentRatio(props.asset.value, props.totalValue)
+    return getCurrentRatio(displayValue.value, props.totalValue)
 })
 </script>
 
@@ -54,15 +73,15 @@ const currentRatio = computed(() => {
                 <div class="flex justify-between items-center gap-2">
                     <div class="flex-1 min-w-0 text-sm">
                         <div class="flex justify-between">
-                            <div>มูลค่า: <span class="text-primary font-bold">{{ formatNumber(asset?.value) }}</span>
+                            <div>มูลค่า: <span class="text-primary font-bold">{{ formatNumber(displayValue) }}</span>
                             </div>
                             <UiCurrentRatio :value="currentRatio" :target="asset.ratio" />
                         </div>
 
                         <div class="flex justify-between">
-                            <div>กำไร: <span :class="profitClass">{{ formatNumber(asset?.profit_amount) }} ({{
+                            <div>กำไร: <span :class="profitClass">{{ formatNumber(displayProfitAmount) }} ({{
                                 formatNumber(asset?.profit_percentage) }}%)</span></div>
-                            <div>ต้นทุน: <span class="text-blue-400">{{ formatNumber(asset?.cost) }}</span></div>
+                            <div>ต้นทุน: <span class="text-blue-400">{{ formatNumber(displayCost) }}</span></div>
                         </div>
                     </div>
                 </div>

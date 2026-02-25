@@ -3,7 +3,7 @@ import type { Asset } from '~/interfaces/asset.interface';
 
 // Stores
 const stockStore = useStockStore()
-const { assets } = storeToRefs(stockStore)
+const { assets, usdRate } = storeToRefs(stockStore)
 await stockStore.fetchAssets()
 
 // Composables
@@ -20,19 +20,28 @@ const assetsRatio = computed(() => {
 })
 
 const assetsTrackingValue = computed(() => {
-    return assets.value?.reduce((acc, asset) => acc + (asset.value || 0), 0) || 0
+    return assets.value?.reduce((acc, asset) => {
+        const value = asset.value || 0
+        return acc + (asset.currency === 'usd' ? value * usdRate.value : value)
+    }, 0) || 0
 })
 
 const assetTrackingCost = computed(() => {
-    return assets.value?.reduce((acc, asset) => acc + (asset.cost || 0), 0) || 0
+    return assets.value?.reduce((acc, asset) => {
+        const cost = asset.cost || 0
+        return acc + (asset.currency === 'usd' ? cost * usdRate.value : cost)
+    }, 0) || 0
 })
 
 const assetTrackingProfitAmount = computed(() => {
-    return assets.value?.reduce((acc, asset) => acc + (asset.profit_amount || 0), 0) || 0
+    return assets.value?.reduce((acc, asset) => {
+        const profit = asset.profit_amount || 0
+        return acc + (asset.currency === 'usd' ? profit * usdRate.value : profit)
+    }, 0) || 0
 })
 
 const assetTrackingProfitPercentage = computed(() => {
-    return assets.value?.reduce((acc, asset) => acc + (asset.profit_percentage || 0), 0) || 0
+    return assetTrackingCost.value > 0 ? (assetTrackingProfitAmount.value / assetTrackingCost.value * 100) : 0
 })
 
 // Methods
@@ -82,8 +91,8 @@ const onUpdateAssets = async () => {
 
         <div class="space-y-2 mb-6">
             <div v-for="asset in assets" :key="asset.id">
-                <AssetCard :asset="asset" :totalValue="assetsTrackingValue" @edit="onEditAsset(asset)"
-                    @delete="onDeleteAsset(asset)" />
+                <AssetCard :asset="asset" :totalValue="assetsTrackingValue" :usdRate="usdRate"
+                    @edit="onEditAsset(asset)" @delete="onDeleteAsset(asset)" />
             </div>
         </div>
     </template>

@@ -4,6 +4,7 @@ import type { Port } from "~/interfaces/port.interface"
 interface Asset {
     id: number
     name: string
+    currency: string | null
     description: string
     ratio: number
     sequence: number
@@ -99,6 +100,8 @@ export const useStockStore = defineStore('stock', () => {
     const stockProfitAmount = (stock: Stock) => stockValue(stock) - stockTotalCost(stock)
     const stockProfitPercentage = (stock: Stock) => stockTotalCost(stock) > 0 ? (stockProfitAmount(stock) / stockTotalCost(stock) * 100) : 0
 
+    const usdRate = computed(() => priceList.value.find(p => p.symbol === 'USD')?.price || 1)
+
     const currentRatio = (value: number, totalValue: number) => totalValue > 0 ? (value / totalValue) * 100 : 0
 
     return {
@@ -108,6 +111,7 @@ export const useStockStore = defineStore('stock', () => {
         fetchPriceList,
         fetchAssets,
         currentRatio,
-        portValue
+        portValue,
+        usdRate
     }
 })
