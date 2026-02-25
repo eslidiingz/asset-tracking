@@ -9,8 +9,11 @@ export default defineEventHandler(async (event) => {
         orderBy: (assetsTable, { desc }) => [desc(assetsTable.ratio)],
         with: {
             ports: {
+                orderBy: (portsTable, { desc }) => [desc(portsTable.ratio)],
                 with: {
-                    stocks: true
+                    stocks: {
+                        orderBy: (stocksTable, { desc }) => [desc(stocksTable.ratio)]
+                    }
                 }
             }
         }

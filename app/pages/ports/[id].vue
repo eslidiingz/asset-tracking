@@ -12,7 +12,6 @@ const {
     resetForm,
     isEditMode,
     form,
-    findSymbol,
     deleteStock
 } = useStock()
 
@@ -76,6 +75,7 @@ onMounted(() => {
     <PortHeader v-if="port" :port="port" :portValue :portCost :portProfit :portProfitPercentage :stocksRatio />
 
     <PortEmpty v-if="stocks?.length === 0" title="ยังไม่มีหุ้น" description="เพิ่มหุ้นเพื่อเริ่มต้น" />
+
     <template v-else>
         <div class="space-y-2 mb-2">
             <div v-for="stock in stocks" :key="stock.id">
