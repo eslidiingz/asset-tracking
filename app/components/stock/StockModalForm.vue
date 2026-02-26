@@ -27,10 +27,10 @@ const typeOptions = ref([
         label: 'หุ้น',
         value: 'stock'
     },
-    {
-        label: 'คริปโต',
-        value: 'crypto'
-    },
+    // {
+    //     label: 'คริปโต',
+    //     value: 'crypto'
+    // },
     {
         label: 'กองทุน',
         value: 'fund'
