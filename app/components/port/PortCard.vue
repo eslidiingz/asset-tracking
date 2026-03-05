@@ -33,7 +33,7 @@ const currentRatio = computed(() => {
                 <template #title>
                     <div class="flex justify-between items-center">
                         <div>
-                            <h3 class="font-bold text-lg text-white group-hover:text-primary transition-colors">
+                            <h3 class="font-bold flex gap-x-1 text-lg text-gray-900 dark:text-gray-100 truncate">
                                 {{ port.name }}
                             </h3>
                             <p class="text-sm text-gray-500 line-clamp-1 italic leading-snug">

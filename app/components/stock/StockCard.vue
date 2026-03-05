@@ -32,7 +32,8 @@ const profitClass = computed(() => symbol_profit_percentage.value > 0 ? 'text-gr
         <template #content>
             <div class="flex justify-between items-center mb-2">
                 <div>
-                    <h3>{{ stock.symbol }}</h3>
+                    <h3 class="font-bold flex gap-x-1 text-lg text-gray-900 dark:text-gray-100 truncate">{{
+                        stock.symbol }}</h3>
                     <p class="text-xs">{{ stock.amount?.toFixed(7) }}</p>
                 </div>
                 <div class="flex gap-x-4">
